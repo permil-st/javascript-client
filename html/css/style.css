@@ -1,0 +1,52 @@
+.container {
+    width: 1140px;
+    margin: 50px auto;
+    border: 2px solid #F3F3F3 ;
+    box-shadow: 5px 5px 5px lightgrey;
+    font-family: "Times New Roman", Times, serif;
+}
+
+.header {
+    border: 2px solid #F3F3F3 ;
+    margin: -2px;
+    padding: 16px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.title {
+    font-weight: bold;
+    width: 20%;
+}
+
+.breadcrumb {
+    display: inline;
+    flex-grow: 2;
+}
+
+.breadcrumb__item {
+    display: inline;
+}
+
+.breadcrumb__item+::before {
+    content: "/";
+    padding: 0px 10px;
+}
+
+.breadcrumb__item--active {
+    font-weight: bold;
+}
+
+.payment {
+    width: 60%;
+    padding: 16px;
+}
+
+.cart {
+    background-color: #F3F3F3;
+    width: 40%;
+    padding: 16px;
+}
