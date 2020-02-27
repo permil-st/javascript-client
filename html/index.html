@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+
 <html>
     <head>
         <title>Training</title>
@@ -20,10 +22,115 @@
             </div>
             <div class="row">
                 <div class="payment">
-                    Payment Block
+                    <div>
+                        <div>
+                            <span>Wallet</span>
+                            <hr/>
+                        </div>
+                        <div class="cards">
+                            <div class="cards__items">
+                                <img src="images/cards/discover.png" class = "cards__items__img" alt="Discover Network" title="Discover Network">
+                                <span class="cards__items__caption">Ending with 8899</span>
+                            </div>
+                            <div class="cards__items cards__items--active">
+                                <img src="images/cards/mastercard.png" class="cards__items__img" alt="Master Card" title="Master Card">
+                                <span class="cards__items__caption">Ending with 8899</span>
+                            </div>
+                            <div class="cards__items">
+                                <img src="images/cards/visa.png" class = "cards__items__img" alt="Visa" title="Visa">
+                                <span class="cards__items__caption">Ending with 8899</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <span>New Card</span>
+                            <hr/>
+                        </div>
+                        <form class="new-card">
+                            <input class="new-card__textbox" type="text" placeholder="Name on Card" />
+                            <input class="new-card__textbox" type="text" placeholder="XXXX-XXXX-XXXX-XXXX" />
+                            <div class="flex">
+                                <div class="col-2 padding-right">
+                                    <input class="new-card__textbox" type="text" placeholder="MM/YY" />
+                                </div>
+                                <div class="col-2 padding-left">
+                                    <input class="new-card__textbox" type="password" placeholder="CVV" />
+                                </div>
+                            </div>
+                            <input class="new-card__button" type="button" value="CONTINUE">
+                        </form>
+                    </div>
                 </div>
                 <div class="cart">
-                    Cart Block
+                    <div style="height: 350px;">
+                        <div class="cart__product">
+                            <img class="cart__product__img" src="images/products/mobile-holder.jpg" alt="Mobile Holder" title="Mobile Holder">
+                            <div class="cart__product__desc">
+                                <p class="cart__product__name">Mobile Holder</p>
+                                <p class="cart__product__color">Black</p>
+                                <p class="cart__product__qty"><span>Quantity:</span>1</p>
+                            </div>
+                            <div class="cart__product__amount">$ 10.00</div>
+                        </div>
+
+                        <div class="cart__product">
+                            <img class="cart__product__img" src="images/products/rado.jpg" alt="Rado Watch" title="Rado Watch">
+                            <div class="cart__product__desc">
+                                <p class="cart__product__name">Rado Watch</p>
+                                <p class="cart__product__color">Black</p>
+                                <p class="cart__product__qty"><span>Quantity:</span>1</p>
+                            </div>
+                            <div class="cart__product__amount">$ 10.00</div>
+                        </div>
+
+                        <div class="cart__product">
+                            <img class="cart__product__img" src="images/products/usb-c-2-micro.jpeg" alt="C type to Micro Convertor" title="C type to Micro Convertor">
+                            <div class="cart__product__desc">
+                                <p class="cart__product__name">C type to Micro Convertor</p>
+                                <p class="cart__product__color">Black</p>
+                                <p class="cart__product__qty"><span>Quantity:</span>1</p>
+                            </div>
+                            <div class="cart__product__amount">$ 10.00</div>
+                        </div>
+
+                        <div class="cart__product">
+                            <img class="cart__product__img" src="images/products/mobile-holder.jpg" alt="Mobile Case" title="Mobile Case">
+                            <div class="cart__product__desc">
+                                <p class="cart__product__name">Mobile Case</p>
+                                <p class="cart__product__color">Black</p>
+                                <p class="cart__product__qty"><span>Quantity:</span>1</p>
+                            </div>
+                            <div class="cart__product__amount">$ 10.00</div>
+                        </div>
+                    </div>
+
+                    <!-- payment summary -->
+                    <div>
+                        <hr />
+
+                        <div class="payment_summary__item">
+                            <span class="payment_summary__item__desc">Sub Total</span>
+                            <span class="payment_summary__item__amount">$ 100.00</span>
+                        </div>
+
+                        <div class="payment_summary__item">
+                            <span class="payment_summary__item__desc">Shipping Total</span>
+                            <span class="payment_summary__item__amount">$ 10.00</span>
+                        </div>
+
+                        <div class="payment_summary__item">
+                            <span class="payment_summary__item__desc">Taxes Total</span>
+                            <span class="payment_summary__item__amount">$ 5.00</span>
+                        </div>
+
+                        <hr />
+
+                        <div class="payment_summary__item payment_summary__item--bold">
+                            <span class="payment_summary__item__desc">Total</span>
+                            <span class="payment_summary__item__amount">$ 115.00</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
