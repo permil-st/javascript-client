@@ -4,9 +4,8 @@ body {
 }
 
 .container {
-    width: 1140px;
     background-color: white;
-    margin: 0px auto;
+    margin: 0px 100px;
     border: 2px solid #F3F3F3 ;
     box-shadow: 5px 5px 5px lightgrey;
     font-family: "Times New Roman", Times, serif;
@@ -23,6 +22,11 @@ body {
     flex-direction: row;
 }
 
+.payment_row {
+    display: flex;
+    flex-direction: row;
+}
+
 .title {
     font-weight: bold;
     width: 20%;
@@ -30,7 +34,6 @@ body {
 
 .breadcrumb {
     display: inline;
-    flex-grow: 2;
 }
 
 .breadcrumb__item {
@@ -44,6 +47,10 @@ body {
 
 .breadcrumb__item--active {
     font-weight: bold;
+}
+
+.close {
+    margin-left: auto;
 }
 
 .payment {
@@ -84,7 +91,7 @@ body {
 
 .new-card {
     padding: 8px;
-    width: 300px;
+    max-width: 300px;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -190,4 +197,49 @@ body {
 
 .padding-right {
     padding-right: 8px;
+}
+
+@media only screen and (max-width: 992px) {
+    .container {
+        margin: 0px 20px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .payment {
+        width: 50%;
+    }
+
+    .cart {
+        width: 50%;
+    }
+
+    .breadcrumb {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .payment_row {
+        flex-direction: column-reverse;
+    }
+
+    .payment {
+        width: unset;
+    }
+
+    .cart {
+        width: unset;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .cards {
+        flex-wrap: wrap;
+    }
+
+    .cards__items {
+        width: unset;
+    }
+    
 }
