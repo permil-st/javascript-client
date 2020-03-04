@@ -5,7 +5,6 @@ import { getNextRoundRobin, getRandomNumber } from '../../lib';
 import { PUBLIC_IMAGE_FOLDER, DEFAULT_BANNER_IMAGE } from '../../configs/constants';
 
 class Slider extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -26,7 +25,6 @@ class Slider extends React.Component {
           currentImage = getNextRoundRobin(banners.length, currentImage);
         }
       }
-      console.log('current Image = ', currentImage);
       this.setState({ currentImage });
     }, duration);
   }
@@ -37,7 +35,13 @@ class Slider extends React.Component {
 
   render() {
     const { currentImage } = this.state;
-    const { altText, height, defaultBanner, banners } = this.props;
+    const {
+      altText,
+      height,
+      defaultBanner,
+      banners,
+    } = this.props;
+
     const source = PUBLIC_IMAGE_FOLDER + ((currentImage >= 0) ? banners[currentImage] : defaultBanner);
 
     return (
@@ -50,7 +54,7 @@ class Slider extends React.Component {
 
 Slider.propTypes = {
   altText: PropTypes.string,
-  banners: PropTypes.array,
+  banners: PropTypes.arrayOf(PropTypes.string),
   defaultBanner: PropTypes.string,
   duration: PropTypes.number,
   height: PropTypes.number,

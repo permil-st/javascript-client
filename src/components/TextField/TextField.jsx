@@ -2,17 +2,44 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TextFieldStyle from './style';
 
-const TextField = ({ value = '', disabled = false, error }) => (
-  <div>
-    <TextFieldStyle type="text" className={(error) ? 'error' : ''} value={value} disabled={(disabled)} />
-    <p style={{ color: 'red' }}>{error}</p>
-  </div>
-);
+const TextField = (props) => {
+  const {
+    value,
+    disabled,
+    error,
+    onChange,
+  } = props;
+
+  return (
+    <>
+      <TextFieldStyle
+        type="text"
+        className={(error) ? 'error' : ''}
+        value={value}
+        disabled={(disabled)}
+        onChange={onChange}
+      />
+      {
+        error && (
+          <p style={{ color: 'red' }}>{error}</p>
+        )
+      }
+    </>
+  );
+};
 
 TextField.propTypes = {
-  value: PropTypes.string.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  error: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  disabled: PropTypes.bool,
+  error: PropTypes.string,
+  onChange: PropTypes.func,
+};
+
+TextField.defaultProps = {
+  value: '',
+  disabled: false,
+  error: undefined,
+  onChange: () => {},
 };
 
 export default TextField;

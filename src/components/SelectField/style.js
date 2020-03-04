@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const TextField = styled.input`
+const SelectFieldStyle = styled.select`
 {
   width: 500px;
   padding: 10px;
@@ -17,4 +17,4 @@ const TextField = styled.input`
   border: 1px solid red;
 }`;
 
-export default TextField;
+export default SelectFieldStyle;
