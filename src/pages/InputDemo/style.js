@@ -13,10 +13,10 @@ const Item = styled.div`
 }
 `;
 
-const Wrapper = styled.div`
+const Form = styled.form`
 {
   margin: 16px;
 }
 `;
 
-export { Label, Item, Wrapper };
+export { Label, Item, Form };

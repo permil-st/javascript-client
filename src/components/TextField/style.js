@@ -7,6 +7,8 @@ const TextField = styled.input`
   margin: 16px 16px 16px 0px;
   box-sizing: border-box;
   font-size: 12px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
 }
 
 :disabled {
