@@ -8,6 +8,7 @@ const TextField = (props) => {
     disabled,
     error,
     onChange,
+    onBlur,
   } = props;
 
   return (
@@ -18,6 +19,7 @@ const TextField = (props) => {
         value={value}
         disabled={(disabled)}
         onChange={onChange}
+        onBlur={onBlur}
       />
       {
         error && (
@@ -33,6 +35,7 @@ TextField.propTypes = {
   disabled: PropTypes.bool,
   error: PropTypes.string,
   onChange: PropTypes.func,
+  onBlur: PropTypes.func,
 };
 
 TextField.defaultProps = {
@@ -40,6 +43,7 @@ TextField.defaultProps = {
   disabled: false,
   error: undefined,
   onChange: () => {},
+  onBlur: () => {},
 };
 
 export default TextField;

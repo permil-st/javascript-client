@@ -42,7 +42,7 @@ class InputDemo extends React.Component {
     const { components } = this.state;
     const { name: nameComponent, sport: sportComponent, do: doComponent } = components;
 
-    return nameComponent.error || sportComponent.error || doComponent.error;
+    return (!!nameComponent.error) || (!!sportComponent.error) || (!!doComponent.error);
   };
 
   isTouched = () => {
@@ -55,7 +55,7 @@ class InputDemo extends React.Component {
   getError = (field) => {
     const { components } = this.state;
     const component = components[field];
-    return component.isTouched && component.error;
+    return (component.isTouched && component.error) || undefined;
   };
 
   getSchema = () => yup.object().shape({
@@ -82,17 +82,19 @@ class InputDemo extends React.Component {
 
   handleNameChange = (e) => {
     let { name } = this.state;
+
+    name = e.target.value;
+
+    this.setState({ name });
+  };
+
+  handleNameBlur= () => {
     const { components } = this.state;
     const { name: nameComponent } = components;
 
     nameComponent.isTouched = true;
-
-    name = e.target.value;
-
-    this.setState({ name }, () => {
-      this.validate(NAME);
-    });
-  };
+    this.validate(NAME);
+  }
 
   handleSportChange = (e) => {
     let { sport, cricket, football } = this.state;
@@ -100,10 +102,7 @@ class InputDemo extends React.Component {
     const { sport: sportComponent, do: doComponent } = components;
 
     sportComponent.isTouched = true;
-
-    if (!e.target.value) {
-      doComponent.isTouched = false;
-    }
+    doComponent.isTouched = false;
 
     sport = e.target.value;
     cricket = '';
@@ -113,6 +112,15 @@ class InputDemo extends React.Component {
       this.validate(SPORT);
       this.validate(DO);
     });
+  }
+
+  handleSportBlur = () => {
+    const { components } = this.state;
+    const { sport: sportComponent } = components;
+
+    sportComponent.isTouched = true;
+    this.validate(SPORT);
+    this.validate(DO);
   }
 
   handleDoChange = (e) => {
@@ -131,6 +139,14 @@ class InputDemo extends React.Component {
     this.setState({ cricket, football }, () => {
       this.validate(DO);
     });
+  }
+
+  handleDoBlur = () => {
+    const { components } = this.state;
+    const { do: doComponent } = components;
+
+    doComponent.isTouched = true;
+    this.validate(DO);
   }
 
   validate = async (args) => {
@@ -164,6 +180,7 @@ class InputDemo extends React.Component {
           <TextField
             value={name}
             error={this.getError(NAME) && this.getError(NAME).message}
+            onBlur={ this.handleNameBlur }
             onChange={this.handleNameChange}
           />
         </Item>
@@ -173,6 +190,7 @@ class InputDemo extends React.Component {
             onChange={this.handleSportChange}
             options={SPORTS_SELECT_OPTIONS}
             value={sport}
+            onBlur={ this.handleSportBlur }
             error={this.getError(SPORT) && this.getError(SPORT).message}
           />
         </Item>
@@ -184,6 +202,7 @@ class InputDemo extends React.Component {
             options={this.getRadioOptions()}
             onChange={this.handleDoChange}
             value={cricket !== '' ? cricket : football}
+            onBlur={ this.handleDoBlur }
             error={this.getError(DO) && this.getError(DO).message}
           />
         </Item>

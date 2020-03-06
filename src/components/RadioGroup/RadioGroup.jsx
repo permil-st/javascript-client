@@ -10,6 +10,7 @@ const RadioGroup = (props) => {
     error,
     onChange,
     options,
+    onBlur,
   } = props;
 
   return (
@@ -25,6 +26,7 @@ const RadioGroup = (props) => {
               name={groupName}
               className={(error) ? 'error' : ''}
               disabled={(disabled)}
+              onBlur={onBlur}
               onChange={onChange}
             />
             <label htmlFor={option.value}>{option.label}</label>
@@ -46,6 +48,7 @@ RadioGroup.propTypes = {
   disabled: PropTypes.bool,
   error: PropTypes.string,
   onChange: PropTypes.func,
+  onBlur: PropTypes.func,
   options: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.string,
     label: PropTypes.string,
@@ -58,6 +61,7 @@ RadioGroup.defaultProps = {
   disabled: false,
   error: undefined,
   onChange: () => {},
+  onBlur: () => {},
   options: [],
 };
 
