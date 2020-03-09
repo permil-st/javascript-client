@@ -180,7 +180,7 @@ class InputDemo extends React.Component {
           <TextField
             value={name}
             error={this.getError(NAME) && this.getError(NAME).message}
-            onBlur={ this.handleNameBlur }
+            onBlur={this.handleNameBlur}
             onChange={this.handleNameChange}
           />
         </Item>
@@ -190,7 +190,7 @@ class InputDemo extends React.Component {
             onChange={this.handleSportChange}
             options={SPORTS_SELECT_OPTIONS}
             value={sport}
-            onBlur={ this.handleSportBlur }
+            onBlur={this.handleSportBlur}
             error={this.getError(SPORT) && this.getError(SPORT).message}
           />
         </Item>
@@ -202,7 +202,7 @@ class InputDemo extends React.Component {
             options={this.getRadioOptions()}
             onChange={this.handleDoChange}
             value={cricket !== '' ? cricket : football}
-            onBlur={ this.handleDoBlur }
+            onBlur={this.handleDoBlur}
             error={this.getError(DO) && this.getError(DO).message}
           />
         </Item>

@@ -1,3 +1,4 @@
+/* eslint no-eval: 0 */
 import React from 'react';
 import PropTypes from 'prop-types';
 import SliderImg from './style';
@@ -42,7 +43,8 @@ class Slider extends React.Component {
       banners,
     } = this.props;
 
-    const source = PUBLIC_IMAGE_FOLDER + ((currentImage >= 0) ? banners[currentImage] : defaultBanner);
+    const source = PUBLIC_IMAGE_FOLDER
+      + (currentImage >= 0) ? banners[currentImage] : defaultBanner;
 
     return (
       <div style={{ width: '100%', height }}>
