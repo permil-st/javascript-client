@@ -1,13 +1,13 @@
 import React from 'react';
 import { ThemeProvider, CssBaseline } from '@material-ui/core/';
-import { ChildrenDemo } from './pages';
+import { Trainee } from './pages';
 import { defaultTheme } from './theme';
 
 function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <ChildrenDemo />
+      <Trainee />
     </ThemeProvider>
   );
 }
