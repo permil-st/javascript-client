@@ -53,7 +53,10 @@ class AddDialog extends React.Component {
 
   getSchema = () => yup.object().shape({
     [NAME]: yup.object().shape({
-      value: yup.string().required('Name is a required field'),
+      value: yup.string().required('Name is a required field').matches(
+        /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/,
+        'Name must be valid',
+      ),
     }),
     [EMAIL]: yup.object().shape({
       value: yup.string().required('Email is a required field').email('Email must be valid'),
