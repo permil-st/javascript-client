@@ -7,4 +7,11 @@ const SliderImg = styled.img`
   height: 100%
 }`;
 
-export default SliderImg;
+const SliderWrapper = styled.div`
+{
+  width: 100%;
+  height: ${(props) => ((props.height) ? props.height : '200px')};
+}
+`;
+
+export { SliderImg, SliderWrapper };
