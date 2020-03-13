@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SliderImg from './style';
+import { SliderImg, SliderWrapper } from './style';
 import { getNextRoundRobin, getRandomNumber } from '../../lib';
 import { PUBLIC_IMAGE_FOLDER, DEFAULT_BANNER_IMAGE } from '../../configs/constants';
 
@@ -13,28 +13,39 @@ class Slider extends React.Component {
     };
   }
 
+
   componentDidMount() {
     const { duration, banners, random } = this.props;
-    let { currentImage } = this.state;
+    const { currentImage } = this.state;
 
-    this.id = setInterval(() => {
-      if (banners.length) {
-        if (random) {
-          currentImage = getRandomNumber(banners.length);
-        } else {
-          currentImage = getNextRoundRobin(banners.length, currentImage);
-        }
-      }
-      this.setState({ currentImage });
+    const id = setInterval(() => {
+      const nextImage = this.getNextImage(banners, currentImage, random);
+      console.log('nextImage = ', nextImage);
+      this.setState({ currentImage: nextImage });
     }, duration);
+
+    this.setState({ id });
   }
 
   componentWillUnmount() {
-    clearInterval(this.id);
+    const { id } = this.state;
+    clearInterval(id);
+  }
+
+  getNextImage = (banners, currentImage, random = false) => {
+    if (banners.length) {
+      if (random) {
+        return getRandomNumber(banners.length);
+      }
+
+      return getNextRoundRobin(banners.length, currentImage);
+    }
+    return -1;
   }
 
   render() {
     const { currentImage } = this.state;
+
     const {
       altText,
       height,
@@ -42,12 +53,13 @@ class Slider extends React.Component {
       banners,
     } = this.props;
 
-    const source = PUBLIC_IMAGE_FOLDER + ((currentImage >= 0) ? banners[currentImage] : defaultBanner);
+    const source = PUBLIC_IMAGE_FOLDER
+    + ((currentImage >= 0) ? banners[currentImage] : defaultBanner);
 
     return (
-      <div style={{ width: '100%', height }}>
+      <SliderWrapper height={height}>
         <SliderImg alt={altText} src={source} />
-      </div>
+      </SliderWrapper>
     );
   }
 }
