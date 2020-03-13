@@ -35,22 +35,21 @@ class InputDemo extends React.Component {
   };
 
   handleNameChange = (e) => {
-    let { name } = this.state;
-    name = e.target.value;
+    const name = e.target.value;
     this.setState({ name });
   };
 
   handleSportChange = (e) => {
-    let { sport, cricket, football } = this.state;
-    sport = e.target.value;
-    cricket = '';
-    football = '';
+    const sport = e.target.value;
+    const cricket = '';
+    const football = '';
     this.setState({ sport, cricket, football });
   }
 
   handleDoChange = (e) => {
     const { sport } = this.state;
-    let { cricket, football } = this.state;
+    let cricket;
+    let football;
 
     if (sport === CRICKET_SELECT_OPTION) {
       cricket = e.target.value;
@@ -87,7 +86,7 @@ class InputDemo extends React.Component {
         </Item>
         <Item>
           {
-            this.getRadioOptions().length !== 0 && (<Label>What you do?</Label>)
+            this.getRadioOptions().length && (<Label>What you do?</Label>)
           }
           <RadioGroup
             options={this.getRadioOptions()}
