@@ -1,11 +1,7 @@
 import styled from 'styled-components';
 
-const TextField = styled.input`
+const RadioGroupStyle = styled.input`
 {
-  width: 500px;
-  padding: 10px;
-  margin: 16px 16px 16px 0px;
-  box-sizing: border-box;
   font-size: 12px;
 }
 
@@ -17,4 +13,4 @@ const TextField = styled.input`
   border: 1px solid red;
 }`;
 
-export default TextField;
+export default RadioGroupStyle;
