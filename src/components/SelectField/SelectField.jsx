@@ -32,7 +32,7 @@ const SelectField = (props) => {
       </SelectFieldStyle>
       {
         error && (
-          <p style={{ color: 'red' }}>{error}</p>
+          <p style={{ color: 'red', 'font-size': '12px' }}>{error}</p>
         )
       }
     </>
