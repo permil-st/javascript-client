@@ -23,7 +23,7 @@ const TextField = (props) => {
       />
       {
         error && (
-          <p style={{ color: 'red' }}>{error}</p>
+          <p style={{ color: 'red', 'font-size': '12px' }}>{error}</p>
         )
       }
     </>
