@@ -12,17 +12,15 @@ const Button = (props) => {
   } = props;
 
   return (
-    <>
-      <ButtonStyle
-        value={value}
-        color={color}
-        style={style}
-        disabled={disabled}
-        onClick={onClick}
-      >
-        {value}
-      </ButtonStyle>
-    </>
+    <ButtonStyle
+      value={value}
+      color={color}
+      style={style}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {value}
+    </ButtonStyle>
   );
 };
 
