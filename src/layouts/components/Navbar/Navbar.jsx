@@ -14,6 +14,28 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const handleClick = (e) => {
+  console.log(e.target.innerText);
+  switch (e.target.innerText) {
+  case 'TRAINEE':
+    navigateTo('/');
+    break;
+  case 'TEXTFIELD DEMO':
+    navigateTo('/text-field-demo');
+    break;
+  case 'INPUT DEMO':
+    navigateTo('/input-demo');
+    break;
+  case 'CHILDREN DEMO':
+    navigateTo('/children');
+    break;
+  }
+};
+
+const navigateTo = (route) => {
+  window.location.href = route;
+};
+
 const Navbar = () => {
   const classes = useStyles();
 
@@ -25,10 +47,10 @@ const Navbar = () => {
             TRAINEE PORTAL
           </Typography>
           <div className={classes.div}>
-            <Button color="inherit">TRAINEE</Button>
-            <Button color="inherit">TEXTFIELD DEMO</Button>
-            <Button color="inherit">INPUT DEMO</Button>
-            <Button color="inherit">CHILDREN DEMO</Button>
+            <Button color="inherit" onClick={handleClick}>TRAINEE</Button>
+            <Button color="inherit" onClick={handleClick}>TEXTFIELD DEMO</Button>
+            <Button color="inherit" onClick={handleClick}>INPUT DEMO</Button>
+            <Button color="inherit" onClick={handleClick}>CHILDREN DEMO</Button>
           </div>
           <Button color="inherit">Login</Button>
         </Toolbar>

@@ -35,7 +35,7 @@ const RadioGroup = (props) => {
       }
       {
         error && (
-          <p style={{ color: 'red' }}>{error}</p>
+          <p style={{ color: 'red', 'fontSize': '12px' }}>{error}</p>
         )
       }
     </>

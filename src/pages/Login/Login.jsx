@@ -239,74 +239,72 @@ class Login extends React.Component {
     } = this.state;
 
     return (
-      <Grid container direction="row" justify="center" alignItems="center" style={{ height: '100vh' }}>
-        <FixedWidthCard>
-          {
-            () => (
-              <>
-                <Grid container direction="column" alignItems="center">
-                  <PinkLockAvatar />
-                  <Typography variant="h4">Login</Typography>
-                </Grid>
-                <form noValidate autoComplete="off">
-                  <TextField
-                    error={!!this.getError(EMAIL)}
-                    autoFocus
-                    id="email"
-                    label="EMAIL"
-                    type="text"
-                    variant="outlined"
-                    value={email.value}
-                    onChange={this.handleEmailChange}
-                    onBlur={this.handleEmailBlur}
-                    margin="normal"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <EmailIcon />
-                        </InputAdornment>
-                      ),
-                    }}
-                    fullWidth
-                    helperText={this.getError(EMAIL)}
-                  />
-
-                  <TextField
-                    error={!!this.getError(PASSWORD)}
-                    id="password"
-                    label="Password"
-                    variant="outlined"
-                    value={password.value}
-                    onChange={this.handlePasswordChange}
-                    onBlur={this.handlePasswordBlur}
-                    margin="normal"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <MyTogglePasswordButton
-                            onClick={this.handlePasswordVisibilityToggle}
-                          >
-                            { () => (
-                              this.getVisibilityIcon(password.showPassword)
-                            )}
-                          </MyTogglePasswordButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                    type={this.getVisibilityType(password.showPassword)}
-                    helperText={this.getError(PASSWORD)}
-                    fullWidth
-                  />
-                </form>
-                <SubmitButton
-                  onClick={this.handleButtonClick}
-                  disabled={(!this.isTouched()) || this.hasErrors()}
+      <FixedWidthCard>
+        {
+          () => (
+            <>
+              <Grid container direction="column" alignItems="center">
+                <PinkLockAvatar />
+                <Typography variant="h4">Login</Typography>
+              </Grid>
+              <form noValidate autoComplete="off">
+                <TextField
+                  error={!!this.getError(EMAIL)}
+                  autoFocus
+                  id="email"
+                  label="EMAIL"
+                  type="text"
+                  variant="outlined"
+                  value={email.value}
+                  onChange={this.handleEmailChange}
+                  onBlur={this.handleEmailBlur}
+                  margin="normal"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <EmailIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  fullWidth
+                  helperText={this.getError(EMAIL)}
                 />
-              </>
-            )
-          }
-        </FixedWidthCard>
-      </Grid>
+
+                <TextField
+                  error={!!this.getError(PASSWORD)}
+                  id="password"
+                  label="Password"
+                  variant="outlined"
+                  value={password.value}
+                  onChange={this.handlePasswordChange}
+                  onBlur={this.handlePasswordBlur}
+                  margin="normal"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MyTogglePasswordButton
+                          onClick={this.handlePasswordVisibilityToggle}
+                        >
+                          { () => (
+                            this.getVisibilityIcon(password.showPassword)
+                          )}
+                        </MyTogglePasswordButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  type={this.getVisibilityType(password.showPassword)}
+                  helperText={this.getError(PASSWORD)}
+                  fullWidth
+                />
+              </form>
+              <SubmitButton
+                onClick={this.handleButtonClick}
+                disabled={(!this.isTouched()) || this.hasErrors()}
+              />
+            </>
+          )
+        }
+      </FixedWidthCard>
     );
   }
 }

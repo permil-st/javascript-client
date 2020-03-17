@@ -1,7 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import { AddDialog } from './components';
-import { Navbar } from '../components';
 
 
 class Trainee extends React.Component {
@@ -40,7 +39,6 @@ class Trainee extends React.Component {
 
     return (
       <>
-        <Navbar />
         <Button variant="contained" onClick={this.handleButtonClick}>
           Primary
         </Button>

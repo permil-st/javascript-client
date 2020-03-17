@@ -62,13 +62,13 @@ class AddDialog extends React.Component {
       value: yup.string().required('Email is a required field').email('Email must be valid'),
     }),
     [PASSWORD]: yup.object().shape({
-      value: yup.string().required().matches(
+      value: yup.string().required('Password is a required field').matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
         'Must Contain 8 Characters, at least one uppercase letter, one lowercase letter, one number and one special character',
       ),
     }),
     [CONFIRM_PASSWORD]: yup.object().when([PASSWORD], (passwordValue, schema) => schema.shape({
-      value: yup.string().required().oneOf([passwordValue.value, ''], 'Must Match Password'),
+      value: yup.string().required('Confirm Password is a required field').oneOf([passwordValue.value, ''], 'Must Match Password'),
     })),
   });
 
