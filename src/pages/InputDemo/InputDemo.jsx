@@ -81,10 +81,7 @@ class InputDemo extends React.Component {
   };
 
   handleNameChange = (e) => {
-    let { name } = this.state;
-
-    name = e.target.value;
-
+    const name = e.target.value;
     this.setState({ name });
   };
 
@@ -97,38 +94,16 @@ class InputDemo extends React.Component {
   }
 
   handleSportChange = (e) => {
-    let { sport, cricket, football } = this.state;
-    const { components } = this.state;
-    const { sport: sportComponent, do: doComponent } = components;
-
-    sportComponent.isTouched = true;
-    doComponent.isTouched = false;
-
-    sport = e.target.value;
-    cricket = '';
-    football = '';
-
-    this.setState({ sport, cricket, football }, () => {
-      this.validate(SPORT);
-      this.validate(DO);
-    });
-  }
-
-  handleSportBlur = () => {
-    const { components } = this.state;
-    const { sport: sportComponent } = components;
-
-    sportComponent.isTouched = true;
-    this.validate(SPORT);
-    this.validate(DO);
+    const sport = e.target.value;
+    const cricket = '';
+    const football = '';
+    this.setState({ sport, cricket, football });
   }
 
   handleDoChange = (e) => {
-    const { sport, components } = this.state;
-    let { cricket, football } = this.state;
-    const { do: doComponent } = components;
-
-    doComponent.isTouched = true;
+    const { sport } = this.state;
+    let cricket;
+    let football;
 
     if (sport === CRICKET_SELECT_OPTION) {
       cricket = e.target.value;
@@ -196,7 +171,7 @@ class InputDemo extends React.Component {
         </Item>
         <Item>
           {
-            this.getRadioOptions().length !== 0 && (<Label>What you do?</Label>)
+            this.getRadioOptions().length && (<Label>What you do?</Label>)
           }
           <RadioGroup
             options={this.getRadioOptions()}
