@@ -18,7 +18,7 @@ const handleClick = (e) => {
   console.log(e.target.innerText);
   switch (e.target.innerText) {
   case 'TRAINEE':
-    navigateTo('/');
+    navigateTo('/trainee');
     break;
   case 'TEXTFIELD DEMO':
     navigateTo('/text-field-demo');
