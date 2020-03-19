@@ -1,20 +1,14 @@
 import React from 'react';
 import * as yup from 'yup';
 import propTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import PersonIcon from '@material-ui/icons/Person';
-import EmailIcon from '@material-ui/icons/Email';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
+
+import {
+  Button, TextField, Dialog, DialogActions, DialogContent, InputAdornment, IconButton, Grid,
+  DialogContentText, DialogTitle,
+} from '@material-ui/core';
+import {
+  Person, Email, Visibility, VisibilityOff,
+} from '@material-ui/icons';
 
 const NAME = 'name';
 const PASSWORD = 'password';
@@ -71,7 +65,6 @@ class AddDialog extends React.Component {
       value: yup.string().required('Confirm Password is a required field').oneOf([passwordValue.value, ''], 'Must Match Password'),
     })),
   });
-
 
   handleNameChange = (event) => {
     const { [NAME]: nameComponent } = this.state;
@@ -156,7 +149,7 @@ class AddDialog extends React.Component {
 
   getVisibilityType = (showPassword) => (showPassword ? 'text' : 'password')
 
-  getVisibilityIcon = (showPassword) => (showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />)
+  getVisibilityIcon = (showPassword) => (showPassword ? <Visibility /> : <VisibilityOff />)
 
   hasErrors = () => {
     const {
@@ -236,7 +229,7 @@ class AddDialog extends React.Component {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <PersonIcon />
+                    <Person />
                   </InputAdornment>
                 ),
               }}
@@ -256,7 +249,7 @@ class AddDialog extends React.Component {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <EmailIcon />
+                    <Email />
                   </InputAdornment>
                 ),
               }}
