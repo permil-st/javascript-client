@@ -1,70 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
-import { Label, Form, Item } from './style';
 
+import { Form, Item } from './style';
 import {
-  TextField,
-  RadioGroup,
-  SelectField,
-  Button,
+  TextField, SelectField, Button, Field, RadioGroupField,
 } from '../../components';
-
 import {
-  CRICKET_RADIO_OPTIONS,
-  CRICKET_SELECT_OPTION,
-  FOOTBALL_SELECT_OPTION,
-  FOOTBALL_RADIO_OPTIONS,
-  SPORTS_SELECT_OPTIONS,
+  CRICKET_RADIO_OPTIONS, CRICKET_SELECT_OPTION, FOOTBALL_SELECT_OPTION,
+  FOOTBALL_RADIO_OPTIONS, SPORTS_SELECT_OPTIONS,
 } from '../../configs/constants';
 
 const NAME = 'name';
 const SPORT = 'sport';
 const DO = 'do';
-
-const Field = (props) => {
-  const { label, children } = props;
-  return (
-    <Item>
-      <Label>{label}</Label>
-      {children}
-    </Item>
-  );
-};
-
-Field.propTypes = {
-  label: PropTypes.string.isRequired,
-  children: PropTypes.object.isRequired,
-};
-
-const RadioGroupField = (props) => {
-  const { label, radioOptions, ...otherProps } = props;
-
-  return (radioOptions.length && (
-    <>
-      <Field label={label}>
-        <RadioGroup
-          options={radioOptions}
-          {...otherProps}
-        />
-      </Field>
-    </>
-  )) || '';
-};
-
-RadioGroupField.propTypes = {
-  label: PropTypes.string.isRequired,
-  radioOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
-  options: PropTypes.arrayOf(PropTypes.string),
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
-  onBlur: PropTypes.func.isRequired,
-  error: PropTypes.string,
-};
-
-RadioGroupField.defaultProps = {
-  error: undefined,
-};
 
 class InputDemo extends React.Component {
   constructor(props) {
@@ -83,18 +31,27 @@ class InputDemo extends React.Component {
     };
   }
 
+  getSchema = yup.object().shape({
+    [NAME]: yup.string().required().min(3).label('Name'),
+    [SPORT]: yup.string().required(),
+    [DO]: yup.string().when(
+      ['cricket', 'football'],
+      (other1, other2, schema) => ((other1 || other2) ? schema : schema.required('what you do is a required field')),
+    ),
+  });
+
   hasErrors = () => {
     const { components } = this.state;
-    const { name: nameComponent, sport: sportComponent, do: doComponent } = components;
+    const { [NAME]: nameComponent, [SPORT]: sportComponent, [DO]: doComponent } = components;
 
     return (!!nameComponent.error) || (!!sportComponent.error) || (!!doComponent.error);
   };
 
   isTouched = () => {
     const { components } = this.state;
-    const { name, sport, do: doComponent } = components;
+    const { [NAME]: nameComponent, [SPORT]: sportComponent, [DO]: doComponent } = components;
 
-    return name.isTouched && sport.isTouched && doComponent.isTouched;
+    return nameComponent.isTouched && sportComponent.isTouched && doComponent.isTouched;
   };
 
   getError = (field) => {
@@ -102,15 +59,6 @@ class InputDemo extends React.Component {
     const component = components[field];
     return (component.isTouched && component.error) || undefined;
   };
-
-  getSchema = () => yup.object().shape({
-    name: yup.string().required().min(3).label('Name'),
-    sport: yup.string().required(),
-    do: yup.string().when(
-      ['cricket', 'football'],
-      (other1, other2, schema) => ((other1 || other2) ? schema : schema.required('what you do is a required field')),
-    ),
-  });
 
   getRadioOptions = () => {
     const { sport } = this.state;
@@ -126,21 +74,10 @@ class InputDemo extends React.Component {
   };
 
   handleNameChange = (e) => {
-    const name = e.target.value;
-    this.setState({ name }, () => {
+    this.setState({ [NAME]: e.target.value }, () => {
       this.validate(NAME);
     });
   };
-
-  handleNameBlur= () => {
-    const { components } = this.state;
-
-    components.name.isTouched = true;
-
-    this.setState({ components }, () => {
-      this.validate(NAME);
-    });
-  }
 
   handleSportChange = (e) => {
     const { components } = this.state;
@@ -150,10 +87,7 @@ class InputDemo extends React.Component {
 
     components.sport.isTouched = true;
     this.setState({
-      sport,
-      cricket,
-      football,
-      components,
+      sport, cricket, football, components,
     }, () => {
       this.validate(SPORT);
     });
@@ -175,37 +109,42 @@ class InputDemo extends React.Component {
     });
   }
 
-  handleDoBlur = () => {
-    const { components } = this.state;
+  handleBlur = (field) => {
+    const { components: oldComponents } = this.state;
+    const components = {
+      ...oldComponents,
+    };
 
-    components.do.isTouched = true;
-
+    components[field].isTouched = true;
     this.setState({ components }, () => {
-      this.validate(DO);
+      this.validate(field);
     });
   }
 
   validate = async (args) => {
     const { state } = this;
     const { components } = state;
+
     try {
-      await this.getSchema().validateAt(args, state);
+      await this.getSchema.validateAt(args, state);
       components[args].error = undefined;
-      this.setState({ components });
     } catch (errors) {
       const { name, message } = errors;
       components[args].error = { name, message };
-      this.setState({ components });
     }
+
+    this.setState({ components });
   }
 
   render = () => {
     const {
-      name,
-      sport,
-      cricket,
-      football,
+      name, sport, cricket, football,
     } = this.state;
+
+    const {
+      getError, handleBlur, handleNameChange, handleSportChange,
+      getRadioOptions, handleDoChange, isTouched, hasErrors,
+    } = this;
 
     console.log(this.state);
 
@@ -214,33 +153,33 @@ class InputDemo extends React.Component {
         <Field label="Name">
           <TextField
             value={name}
-            error={this.getError(NAME) && this.getError(NAME).message}
-            onBlur={this.handleNameBlur}
-            onChange={this.handleNameChange}
+            error={getError(NAME) && getError(NAME).message}
+            onBlur={() => { handleBlur(NAME); }}
+            onChange={handleNameChange}
           />
         </Field>
         <Field label="Sports">
           <SelectField
-            onChange={this.handleSportChange}
+            onChange={handleSportChange}
             options={SPORTS_SELECT_OPTIONS}
             value={sport}
-            error={this.getError(SPORT) && this.getError(SPORT).message}
+            error={getError(SPORT) && getError(SPORT).message}
           />
         </Field>
         <RadioGroupField
           label="What you do?"
-          radioOptions={this.getRadioOptions()}
-          onChange={this.handleDoChange}
+          radioOptions={getRadioOptions()}
+          onChange={handleDoChange}
           value={cricket || football}
-          onBlur={this.handleDoBlur}
-          error={this.getError(DO) && this.getError(DO).message}
+          onBlur={() => { handleBlur(DO); }}
+          error={getError(DO) && getError(DO).message}
         />
         <Item align="end">
           <Button value="Cancel" />
           <Button
             color="default"
             value="Submit"
-            disabled={(!this.isTouched()) || this.hasErrors()}
+            disabled={(!isTouched()) || hasErrors()}
             onClick={() => { alert('form Submitted'); }}
           />
         </Item>
