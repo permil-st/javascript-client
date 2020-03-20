@@ -14,7 +14,7 @@ const Field = (props) => {
 
 Field.propTypes = {
   label: PropTypes.string.isRequired,
-  children: PropTypes.object.isRequired,
+  children: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 

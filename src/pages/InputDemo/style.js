@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 const Form = styled.form`
 {
   margin: 16px;
+  width: 400px;
 }
 `;
 

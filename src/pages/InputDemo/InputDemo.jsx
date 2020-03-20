@@ -80,10 +80,11 @@ class InputDemo extends React.Component {
   };
 
   handleSportChange = (e) => {
-    const { components } = this.state;
+    const { components: oldComponents } = this.state;
     const sport = e.target.value;
     const cricket = '';
     const football = '';
+    const components = { ...oldComponents };
 
     components.sport.isTouched = true;
     this.setState({
@@ -111,9 +112,7 @@ class InputDemo extends React.Component {
 
   handleBlur = (field) => {
     const { components: oldComponents } = this.state;
-    const components = {
-      ...oldComponents,
-    };
+    const components = { ...oldComponents };
 
     components[field].isTouched = true;
     this.setState({ components }, () => {
@@ -123,7 +122,8 @@ class InputDemo extends React.Component {
 
   validate = async (args) => {
     const { state } = this;
-    const { components } = state;
+    const { components: oldComponents } = state;
+    const components = { ...oldComponents };
 
     try {
       await this.getSchema.validateAt(args, state);

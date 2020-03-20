@@ -11,7 +11,7 @@ const RadioGroupField = (props) => {
       <Field label={label}>
         <RadioGroup
           options={radioOptions}
-          {...otherProps}
+          {...otherProps}  // eslint-disable-line
         />
       </Field>
     </>
