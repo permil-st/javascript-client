@@ -2,10 +2,10 @@ import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
-  Button, List, ListItem, ListItemText,
+  Button, List, ListItem, ListItemText, Grid,
 } from '@material-ui/core';
 
-import { AddDialog } from './components';
+import { AddDialog, Table } from './components';
 
 const TraineeListField = (props) => {
   const { traineeList } = props;
@@ -60,12 +60,25 @@ class TraineeList extends React.Component {
   render() {
     const { isOpen } = this.state;
     const { traineeList } = this.props;
+    const columns = [
+      {
+        field: 'name',
+        align: 'center',
+        label: 'Name',
+      }, {
+        field: 'email',
+        label: 'E-mail',
+      },
+    ];
 
     return (
       <>
-        <Button variant="contained" onClick={this.handleButtonClick}>
-          Primary
-        </Button>
+        <Grid container justify="flex-end">
+          <Button variant="outlined" color="primary" onClick={this.handleButtonClick}>
+            ADD TRAINEELIST
+          </Button>
+        </Grid>
+        <Table id="trainee" columns={columns} data={traineeList} />
         <AddDialog
           open={isOpen}
           onClose={this.handleDialogClose}
