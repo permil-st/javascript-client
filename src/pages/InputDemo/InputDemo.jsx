@@ -1,13 +1,18 @@
 import React from 'react';
-import { TextField, RadioGroup, SelectField } from '../../components';
-import { Label, Wrapper, Item } from './style';
+import * as yup from 'yup';
+
+import { Form, Item } from './style';
 import {
-  CRICKET_RADIO_OPTIONS,
-  CRICKET_SELECT_OPTION,
-  FOOTBALL_SELECT_OPTION,
-  FOOTBALL_RADIO_OPTIONS,
-  SPORTS_SELECT_OPTIONS,
+  TextField, SelectField, Button, Field, RadioGroupField,
+} from '../../components';
+import {
+  CRICKET_RADIO_OPTIONS, CRICKET_SELECT_OPTION, FOOTBALL_SELECT_OPTION,
+  FOOTBALL_RADIO_OPTIONS, SPORTS_SELECT_OPTIONS,
 } from '../../configs/constants';
+
+const NAME = 'name';
+const SPORT = 'sport';
+const DO = 'do';
 
 class InputDemo extends React.Component {
   constructor(props) {
@@ -18,8 +23,42 @@ class InputDemo extends React.Component {
       sport: '',
       cricket: '',
       football: '',
+      components: {
+        [NAME]: {},
+        [SPORT]: {},
+        [DO]: {},
+      },
     };
   }
+
+  getSchema = yup.object().shape({
+    [NAME]: yup.string().required().min(3).label('Name'),
+    [SPORT]: yup.string().required(),
+    [DO]: yup.string().when(
+      ['cricket', 'football'],
+      (other1, other2, schema) => ((other1 || other2) ? schema : schema.required('what you do is a required field')),
+    ),
+  });
+
+  hasErrors = () => {
+    const { components } = this.state;
+    const { [NAME]: nameComponent, [SPORT]: sportComponent, [DO]: doComponent } = components;
+
+    return (!!nameComponent.error) || (!!sportComponent.error) || (!!doComponent.error);
+  };
+
+  isTouched = () => {
+    const { components } = this.state;
+    const { [NAME]: nameComponent, [SPORT]: sportComponent, [DO]: doComponent } = components;
+
+    return nameComponent.isTouched && sportComponent.isTouched && doComponent.isTouched;
+  };
+
+  getError = (field) => {
+    const { components } = this.state;
+    const component = components[field];
+    return (component.isTouched && component.error) || undefined;
+  };
 
   getRadioOptions = () => {
     const { sport } = this.state;
@@ -35,15 +74,24 @@ class InputDemo extends React.Component {
   };
 
   handleNameChange = (e) => {
-    const name = e.target.value;
-    this.setState({ name });
+    this.setState({ [NAME]: e.target.value }, () => {
+      this.validate(NAME);
+    });
   };
 
   handleSportChange = (e) => {
+    const { components: oldComponents } = this.state;
     const sport = e.target.value;
     const cricket = '';
     const football = '';
-    this.setState({ sport, cricket, football });
+    const components = { ...oldComponents };
+
+    components.sport.isTouched = true;
+    this.setState({
+      sport, cricket, football, components,
+    }, () => {
+      this.validate(SPORT);
+    });
   }
 
   handleDoChange = (e) => {
@@ -57,44 +105,85 @@ class InputDemo extends React.Component {
       football = e.target.value;
     }
 
-    this.setState({ cricket, football });
+    this.setState({ cricket, football }, () => {
+      this.validate(DO);
+    });
+  }
+
+  handleBlur = (field) => {
+    const { components: oldComponents } = this.state;
+    const components = { ...oldComponents };
+
+    components[field].isTouched = true;
+    this.setState({ components }, () => {
+      this.validate(field);
+    });
+  }
+
+  validate = async (args) => {
+    const { state } = this;
+    const { components: oldComponents } = state;
+    const components = { ...oldComponents };
+
+    try {
+      await this.getSchema.validateAt(args, state);
+      components[args].error = undefined;
+    } catch (errors) {
+      const { name, message } = errors;
+      components[args].error = { name, message };
+    }
+
+    this.setState({ components });
   }
 
   render = () => {
     const {
-      name,
-      sport,
-      cricket,
-      football,
+      name, sport, cricket, football,
     } = this.state;
+
+    const {
+      getError, handleBlur, handleNameChange, handleSportChange,
+      getRadioOptions, handleDoChange, isTouched, hasErrors,
+    } = this;
 
     console.log(this.state);
 
     return (
-      <Wrapper>
-        <Item>
-          <Label>Name</Label>
-          <TextField value={name} onChange={this.handleNameChange} />
-        </Item>
-        <Item>
-          <Label>Select the you play?</Label>
+      <Form>
+        <Field label="Name">
+          <TextField
+            value={name}
+            error={getError(NAME) && getError(NAME).message}
+            onBlur={() => { handleBlur(NAME); }}
+            onChange={handleNameChange}
+          />
+        </Field>
+        <Field label="Sports">
           <SelectField
-            onChange={this.handleSportChange}
+            onChange={handleSportChange}
             options={SPORTS_SELECT_OPTIONS}
             value={sport}
+            error={getError(SPORT) && getError(SPORT).message}
+          />
+        </Field>
+        <RadioGroupField
+          label="What you do?"
+          radioOptions={getRadioOptions()}
+          onChange={handleDoChange}
+          value={cricket || football}
+          onBlur={() => { handleBlur(DO); }}
+          error={getError(DO) && getError(DO).message}
+        />
+        <Item align="end">
+          <Button value="Cancel" />
+          <Button
+            color="default"
+            value="Submit"
+            disabled={(!isTouched()) || hasErrors()}
+            onClick={() => { alert('form Submitted'); }}
           />
         </Item>
-        <Item>
-          {
-            this.getRadioOptions().length && (<Label>What you do?</Label>)
-          }
-          <RadioGroup
-            options={this.getRadioOptions()}
-            onChange={this.handleDoChange}
-            value={cricket !== '' ? cricket : football}
-          />
-        </Item>
-      </Wrapper>
+      </Form>
     );
   }
 }

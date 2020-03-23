@@ -2,11 +2,12 @@ import styled from 'styled-components';
 
 const TextField = styled.input`
 {
-  width: 500px;
+  width: 100%;
   padding: 10px;
-  margin: 16px 16px 16px 0px;
   box-sizing: border-box;
   font-size: 12px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
 }
 
 :disabled {

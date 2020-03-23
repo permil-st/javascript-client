@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RadioGroupStyle from './style';
+import { Error } from '../Error';
 
 const RadioGroup = (props) => {
   const {
@@ -10,6 +11,7 @@ const RadioGroup = (props) => {
     error,
     onChange,
     options,
+    onBlur,
   } = props;
 
   return (
@@ -25,17 +27,14 @@ const RadioGroup = (props) => {
               name={groupName}
               className={(error) ? 'error' : ''}
               disabled={(disabled)}
+              onBlur={onBlur}
               onChange={onChange}
             />
             <label htmlFor={option.value}>{option.label}</label>
           </div>
         ))
       }
-      {
-        error && (
-          <p style={{ color: 'red' }}>{error}</p>
-        )
-      }
+      <Error error={error} />
     </>
   );
 };
@@ -46,6 +45,7 @@ RadioGroup.propTypes = {
   disabled: PropTypes.bool,
   error: PropTypes.string,
   onChange: PropTypes.func,
+  onBlur: PropTypes.func,
   options: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.string,
     label: PropTypes.string,
@@ -58,6 +58,7 @@ RadioGroup.defaultProps = {
   disabled: false,
   error: undefined,
   onChange: () => {},
+  onBlur: () => {},
   options: [],
 };
 
