@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SelectFieldStyle from './style';
+import { Error } from '../Error';
 
 const SelectField = (props) => {
   const {
@@ -30,11 +31,7 @@ const SelectField = (props) => {
           ))
         }
       </SelectFieldStyle>
-      {
-        error && (
-          <p style={{ color: 'red', 'font-size': '12px' }}>{error}</p>
-        )
-      }
+      <Error error={error} />
     </>
   );
 };

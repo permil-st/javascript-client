@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TextFieldStyle from './style';
+import { Error } from '../Error';
 
 const TextField = (props) => {
   const {
@@ -21,11 +22,7 @@ const TextField = (props) => {
         onChange={onChange}
         onBlur={onBlur}
       />
-      {
-        error && (
-          <p style={{ color: 'red', 'font-size': '12px' }}>{error}</p>
-        )
-      }
+      <Error error={error} />
     </>
   );
 };
