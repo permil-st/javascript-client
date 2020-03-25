@@ -1,4 +1,3 @@
-/* eslint no-eval: 0 */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { SliderImg, SliderWrapper } from './style';
