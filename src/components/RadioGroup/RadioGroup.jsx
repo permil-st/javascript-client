@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RadioGroupStyle from './style';
+import { Error } from '../Error';
 
 const RadioGroup = (props) => {
   const {
@@ -33,11 +34,7 @@ const RadioGroup = (props) => {
           </div>
         ))
       }
-      {
-        error && (
-          <p style={{ color: 'red', 'fontSize': '12px' }}>{error}</p>
-        )
-      }
+      <Error error={error} />
     </>
   );
 };
