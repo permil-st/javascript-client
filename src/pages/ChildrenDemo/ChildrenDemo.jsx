@@ -17,11 +17,11 @@ const ChildrenDemo = () => (
               {' '}
               {keys.first}
               {' '}
-and
+              and
               {' '}
               {keys.second}
               {' '}
-is
+              is
               {' '}
               {keys.result}
             </Typography>
