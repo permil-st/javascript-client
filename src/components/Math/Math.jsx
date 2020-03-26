@@ -25,7 +25,7 @@ const calculate = (first, second, operator) => {
     '/': first / second,
   };
 
-  if (!validOperations[operator]) {
+  if (validOperations[operator] === undefined) {
     throw new Error('Invalid Operator');
   }
 
