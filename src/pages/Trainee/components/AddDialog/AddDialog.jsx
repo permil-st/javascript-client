@@ -8,13 +8,20 @@ import {
   Person, Email,
 } from '@material-ui/icons';
 
-import { PasswordField } from '../PasswordField';
-import { TextFieldWithIcon } from '../TextFieldWithIcon';
+import { PasswordField, TextFieldWithIcon } from '../../../components';
 
 const NAME = 'name';
 const PASSWORD = 'password';
 const EMAIL = 'email';
 const CONFIRM_PASSWORD = 'confirmPassword';
+
+const NAME_REGEX = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
+const NAME_ERROR_MESSAGE = 'Name must be a string';
+
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+const PASSWORD_ERROR_MESSAGE = 'Must Contain 8 Characters, at least one uppercase letter, one lowercase letter, one number and one special character';
+
+const CONFIRM_PASSWORD_ERROR_MESSAGE = 'Confirm Password is must match';
 
 class AddDialog extends React.Component {
   constructor(props) {
@@ -36,22 +43,17 @@ class AddDialog extends React.Component {
 
   getSchema = yup.object().shape({
     [NAME]: yup.object().shape({
-      value: yup.string().required().matches(
-        /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/, 'Name must be a string',
-      ).label('Name'),
+      value: yup.string().required().matches(NAME_REGEX, NAME_ERROR_MESSAGE).label('Name'),
     }),
     [EMAIL]: yup.object().shape({
       value: yup.string().required().email().label('Email'),
     }),
     [PASSWORD]: yup.object().shape({
-      value: yup.string().required('Password is a required field').matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
-        'Must Contain 8 Characters, at least one uppercase letter, one lowercase letter, one number and one special character',
-      ).label('Password'),
+      value: yup.string().required().matches(PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE).label('Password'),
+
     }),
     [CONFIRM_PASSWORD]: yup.object().when([PASSWORD], (passwordValue, schema) => schema.shape({
-      value: yup.string().required().oneOf([passwordValue.value, ''],
-        'Confirm Password is must match').label('Confirm Password'),
+      value: yup.string().required().oneOf([passwordValue.value, ''], CONFIRM_PASSWORD_ERROR_MESSAGE).label('Confirm Password'),
     })),
   });
 
