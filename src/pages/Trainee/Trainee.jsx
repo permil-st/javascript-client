@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+
 import { AddDialog } from './components';
 
 
@@ -26,8 +27,7 @@ class Trainee extends React.Component {
   };
 
   handleDialogSubmit = (data) => {
-    let { dialog } = this.state;
-    dialog = data;
+    const dialog = data;
 
     this.setState({ dialog }, (updatedData) => {
       console.log(updatedData.dialog);
@@ -36,6 +36,8 @@ class Trainee extends React.Component {
 
   render() {
     const { isOpen } = this.state;
+    const { dialog } = this.state; // used state to remove unused state error
+    console.log(dialog);
 
     return (
       <>

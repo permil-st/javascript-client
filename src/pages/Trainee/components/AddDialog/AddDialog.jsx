@@ -1,20 +1,15 @@
 import React from 'react';
 import * as yup from 'yup';
 import propTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import PersonIcon from '@material-ui/icons/Person';
-import EmailIcon from '@material-ui/icons/Email';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
+import {
+  Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid,
+} from '@material-ui/core';
+import {
+  Person, Email,
+} from '@material-ui/icons';
+
+import { PasswordField } from '../PasswordField';
+import { TextFieldWithIcon } from '../TextFieldWithIcon';
 
 const NAME = 'name';
 const PASSWORD = 'password';
@@ -26,137 +21,82 @@ class AddDialog extends React.Component {
     super(props);
 
     this.state = {
-      [NAME]: {
-        isTouch: false,
-        value: '',
-        error: {},
-      },
-      [EMAIL]: {
-        isTouch: false,
-        value: '',
-        error: {},
-      },
-      [PASSWORD]: {
-        isTouch: false,
-        showPassword: false,
-        value: '',
-        error: {},
-      },
-      [CONFIRM_PASSWORD]: {
-        isTouch: false,
-        showPassword: false,
-        value: '',
-        error: {},
-      },
+      [NAME]: this.getInitialState,
+      [EMAIL]: this.getInitialState,
+      [PASSWORD]: this.getInitialState,
+      [CONFIRM_PASSWORD]: this.getInitialState,
     };
   }
 
-  getSchema = () => yup.object().shape({
+  getInitialState = {
+    isTouch: false,
+    value: '',
+    error: {},
+  };
+
+  getSchema = yup.object().shape({
     [NAME]: yup.object().shape({
-      value: yup.string().required('Name is a required field').matches(
-        /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/,
-        'Name must be valid',
-      ),
+      value: yup.string().required().matches(
+        /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/, 'Name must be a string',
+      ).label('Name'),
     }),
     [EMAIL]: yup.object().shape({
-      value: yup.string().required('Email is a required field').email('Email must be valid'),
+      value: yup.string().required().email().label('Email'),
     }),
     [PASSWORD]: yup.object().shape({
       value: yup.string().required('Password is a required field').matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
         'Must Contain 8 Characters, at least one uppercase letter, one lowercase letter, one number and one special character',
-      ),
+      ).label('Password'),
     }),
     [CONFIRM_PASSWORD]: yup.object().when([PASSWORD], (passwordValue, schema) => schema.shape({
-      value: yup.string().required('Confirm Password is a required field').oneOf([passwordValue.value, ''], 'Must Match Password'),
+      value: yup.string().required().oneOf([passwordValue.value, ''],
+        'Confirm Password is must match').label('Confirm Password'),
     })),
   });
 
 
-  handleNameChange = (event) => {
-    const { [NAME]: nameComponent } = this.state;
+  handleChange = (event, field) => {
+    const { [field]: oldComponent } = this.state;
     const { value } = event.target;
-    nameComponent.value = value;
-    this.setState({ [NAME]: nameComponent }, () => {
-      this.validate(NAME);
-    });
-  }
 
-  handleEmailChange = (event) => {
-    const { [EMAIL]: emailComponent } = this.state;
-    const { value } = event.target;
-    emailComponent.value = value;
-    this.setState({ [EMAIL]: emailComponent }, () => {
-      this.validate(EMAIL);
+    this.setState({
+      [field]: {
+        ...oldComponent,
+        value,
+      },
+    }, () => {
+      this.validate(field);
     });
   }
 
   handlePasswordChange = (event) => {
     const { [PASSWORD]: passwordComponent } = this.state;
     const { value } = event.target;
-    passwordComponent.value = value;
-    this.setState({ [PASSWORD]: passwordComponent }, () => {
+
+    this.setState({
+      [PASSWORD]: {
+        ...passwordComponent,
+        value,
+      },
+    }, () => {
       this.validate(PASSWORD);
       this.validate(CONFIRM_PASSWORD);
     });
   }
 
-  handleConfirmPasswordChange = (event) => {
-    const { [CONFIRM_PASSWORD]: confirmPasswordComponent } = this.state;
-    const { value } = event.target;
-    confirmPasswordComponent.value = value;
-    this.setState({ [CONFIRM_PASSWORD]: confirmPasswordComponent }, () => {
-      this.validate(CONFIRM_PASSWORD);
+  handleBlur = (field) => {
+    const { [field]: oldComponent } = this.state;
+
+    this.setState({
+      [field]: {
+        ...oldComponent,
+        isTouch: true,
+      },
+    }, () => {
+      this.validate(field);
     });
   }
-
-  handleNameBlur = () => {
-    const { [NAME]: nameComponent } = this.state;
-    nameComponent.isTouch = true;
-    this.setState({ [NAME]: nameComponent }, () => {
-      this.validate(NAME);
-    });
-  }
-
-  handleEmailBlur = () => {
-    const { [EMAIL]: emailComponent } = this.state;
-    emailComponent.isTouch = true;
-    this.setState({ [EMAIL]: emailComponent }, () => {
-      this.validate(EMAIL);
-    });
-  }
-
-  handlePasswordBlur = () => {
-    const { [PASSWORD]: passwordComponent } = this.state;
-    passwordComponent.isTouch = true;
-    this.setState({ [PASSWORD]: passwordComponent }, () => {
-      this.validate(PASSWORD);
-    });
-  }
-
-  handleConfirmPasswordBlur = () => {
-    const { [CONFIRM_PASSWORD]: confirmPasswordComponent } = this.state;
-    confirmPasswordComponent.isTouch = true;
-    this.setState({ [CONFIRM_PASSWORD]: confirmPasswordComponent }, () => {
-      this.validate(CONFIRM_PASSWORD);
-    });
-  }
-
-  handlePasswordVisibilityToggle = () => {
-    const { [PASSWORD]: password } = this.state;
-    password.showPassword = !password.showPassword;
-    this.setState({ password });
-  }
-
-  handleConfirmPasswordVisibilityToggle = () => {
-    const { [CONFIRM_PASSWORD]: confirmPassword } = this.state;
-    confirmPassword.showPassword = !confirmPassword.showPassword;
-    this.setState({ confirmPassword });
-  }
-
-  getVisibilityType = (showPassword) => (showPassword ? 'text' : 'password')
-
-  getVisibilityIcon = (showPassword) => (showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />)
 
   hasErrors = () => {
     const {
@@ -188,24 +128,34 @@ class AddDialog extends React.Component {
 
   getError = (field) => {
     const { [field]: component } = this.state;
-    return (component.isTouch && component.error.message);
+    return (component.isTouch && component.error.message) || '';
   };
 
   validate = async (args) => {
     const { state } = this;
     try {
-      await this.getSchema().validateAt(args, state);
-      state[args].error = {};
-      this.setState({ state });
+      await this.getSchema.validateAt(args, state);
+      this.setState({
+        [args]: {
+          ...state[args],
+          error: {},
+        },
+      });
     } catch (errors) {
       const { name, message } = errors;
-      state[args].error = { name, message };
-      this.setState({ state });
+
+      this.setState({
+        [args]: {
+          ...state[args],
+          error: { name, message },
+        },
+      });
     }
   }
 
   render() {
     const { open, onClose, onSubmit } = this.props;
+    const { handleBlur, getError, handleChange } = this;
 
     const {
       [NAME]: name,
@@ -222,101 +172,55 @@ class AddDialog extends React.Component {
             Enter your trainee details.
           </DialogContentText>
           <form noValidate autoComplete="off">
-            <TextField
-              error={!!this.getError(NAME)}
+            <TextFieldWithIcon
+              error={!!getError(NAME)}
               autoFocus
               id="name"
               label="Name"
               type="text"
-              variant="outlined"
               value={name.value}
-              onChange={this.handleNameChange}
-              onBlur={this.handleNameBlur}
-              margin="normal"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PersonIcon />
-                  </InputAdornment>
-                ),
-              }}
+              onChange={(event) => handleChange(event, NAME)}
+              onBlur={() => handleBlur(NAME)}
               fullWidth
-              helperText={this.getError(NAME)}
+              helperText={getError(NAME)}
+              icon={Person}
             />
 
-            <TextField
-              error={!!this.getError(EMAIL)}
+            <TextFieldWithIcon
+              error={!!getError(EMAIL)}
               id="email"
               label="Email"
               type="email"
               value={email.value}
-              onChange={this.handleEmailChange}
-              onBlur={this.handleEmailBlur}
-              margin="normal"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <EmailIcon />
-                  </InputAdornment>
-                ),
-              }}
+              onChange={(event) => handleChange(event, EMAIL)}
+              onBlur={() => handleBlur(EMAIL)}
               fullWidth
-              helperText={this.getError(EMAIL)}
-              variant="outlined"
+              helperText={getError(EMAIL)}
+              icon={Email}
             />
 
             <Grid container spacing={3}>
               <Grid item lg={6}>
-                <TextField
-                  error={!!this.getError(PASSWORD)}
+                <PasswordField
+                  error={!!getError(PASSWORD)}
                   id="password"
                   label="Password"
-                  variant="outlined"
                   value={password.value}
                   onChange={this.handlePasswordChange}
-                  onBlur={this.handlePasswordBlur}
-                  margin="normal"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={this.handlePasswordVisibilityToggle}
-                        >
-                          { this.getVisibilityIcon(password.showPassword)}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  type={this.getVisibilityType(password.showPassword)}
-                  helperText={this.getError(PASSWORD)}
+                  onBlur={() => handleBlur(PASSWORD)}
+                  helperText={getError(PASSWORD)}
                 />
               </Grid>
 
               <Grid item lg={6}>
-                <TextField
-                  error={!!this.getError(CONFIRM_PASSWORD)}
+                <PasswordField
+                  error={!!getError(CONFIRM_PASSWORD)}
                   id="confirmPassword"
                   label="Confirm Password"
-                  variant="outlined"
                   value={confirmPassword.value}
-                  onBlur={this.handleConfirmPasswordBlur}
-                  onChange={this.handleConfirmPasswordChange}
-                  margin="normal"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={this.handleConfirmPasswordVisibilityToggle}
-                        >
-                          { this.getVisibilityIcon(confirmPassword.showPassword)}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  type={this.getVisibilityType(confirmPassword.showPassword)}
-                  helperText={this.getError(CONFIRM_PASSWORD)}
+                  onBlur={() => handleBlur(CONFIRM_PASSWORD)}
+                  onChange={(event) => handleChange(event, CONFIRM_PASSWORD)}
+                  helperText={getError(CONFIRM_PASSWORD)}
                 />
               </Grid>
             </Grid>
