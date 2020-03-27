@@ -24,7 +24,7 @@ class PasswordField extends React.Component {
 
   render() {
     const {
-      error, id, label, variant, value, onChange, onBlur, margin, helperText,
+      error, id, label, variant, value, onChange, onBlur, margin, helperText, fullWidth,
     } = this.props;
     const { getVisibilityType, getVisibilityIcon, handlePasswordVisibilityToggle } = this;
     const { showPassword } = this.state;
@@ -53,6 +53,7 @@ class PasswordField extends React.Component {
         }}
         type={getVisibilityType(showPassword)}
         helperText={helperText}
+        fullWidth={fullWidth}
       />
     );
   }
@@ -68,6 +69,7 @@ PasswordField.propTypes = {
   onBlur: PropTypes.func,
   margin: PropTypes.string,
   helperText: PropTypes.string,
+  fullWidth: PropTypes.bool,
 };
 
 PasswordField.defaultProps = {
@@ -79,6 +81,7 @@ PasswordField.defaultProps = {
   onBlur: () => {},
   margin: 'normal',
   helperText: '',
+  fullWidth: false,
 };
 
 export default PasswordField;
