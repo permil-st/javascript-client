@@ -27,7 +27,7 @@ class Login extends React.Component {
     error: {},
   }
 
-  getSchema = () => yup.object().shape({
+  getSchema = yup.object().shape({
     [EMAIL]: yup.object().shape({
       value: yup.string().required().email().label('Email'),
     }),
