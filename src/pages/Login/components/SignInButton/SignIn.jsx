@@ -4,7 +4,7 @@ import { Button } from '@material-ui/core';
 
 import useStyles from './styles';
 
-const SubmitButton = (props) => {
+const SignInButton = (props) => {
   const classes = useStyles();
   const { onClick, disabled } = props;
 
@@ -16,19 +16,19 @@ const SubmitButton = (props) => {
       onClick={onClick}
       disabled={disabled}
     >
-      Submit
+      Sign In
     </Button>
   );
 };
 
-SubmitButton.propTypes = {
+SignInButton.propTypes = {
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
 };
 
-SubmitButton.defaultProps = {
+SignInButton.defaultProps = {
   onClick: () => {},
   disabled: false,
 };
 
-export default SubmitButton;
+export default SignInButton;

@@ -24,7 +24,8 @@ class PasswordField extends React.Component {
 
   render() {
     const {
-      error, id, label, variant, value, onChange, onBlur, margin, helperText, fullWidth,
+      error, id, label, variant, value, onChange, onBlur, margin,
+      helperText, fullWidth, adornment, adornmentPosition,
     } = this.props;
     const { getVisibilityType, getVisibilityIcon, handlePasswordVisibilityToggle } = this;
     const { showPassword } = this.state;
@@ -40,8 +41,8 @@ class PasswordField extends React.Component {
         onBlur={onBlur}
         margin={margin}
         InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
+          [adornment]: (
+            <InputAdornment position={adornmentPosition}>
               <IconButton
                 aria-label="toggle password visibility"
                 onClick={handlePasswordVisibilityToggle}
@@ -70,6 +71,8 @@ PasswordField.propTypes = {
   margin: PropTypes.string,
   helperText: PropTypes.string,
   fullWidth: PropTypes.bool,
+  adornment: PropTypes.string,
+  adornmentPosition: PropTypes.string,
 };
 
 PasswordField.defaultProps = {
@@ -82,6 +85,8 @@ PasswordField.defaultProps = {
   margin: 'normal',
   helperText: '',
   fullWidth: false,
+  adornment: 'endAdornment',
+  adornmentPosition: 'end',
 };
 
 export default PasswordField;
