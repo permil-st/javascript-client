@@ -29,8 +29,8 @@ const Navbar = () => {
             <Button color="inherit">TEXTFIELD DEMO</Button>
             <Button color="inherit">INPUT DEMO</Button>
             <Button color="inherit">CHILDREN DEMO</Button>
+            <Button color="inherit">Login</Button>
           </div>
-          <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
       <Toolbar />
