@@ -58,7 +58,7 @@ const Math = (props) => {
   return (
     <div>
       {
-        (children) ? children(args) : dafaultTemplate(args)
+        children ? children(args) : dafaultTemplate(args)
       }
     </div>
   );
