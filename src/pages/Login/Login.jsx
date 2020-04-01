@@ -1,151 +1,33 @@
 import React from 'react';
 import * as yup from 'yup';
-import propTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
-import LockIcon from '@material-ui/icons/Lock';
-import { makeStyles } from '@material-ui/core/styles';
-import { pink } from '@material-ui/core/colors';
-import TextField from '@material-ui/core/TextField';
-import EmailIcon from '@material-ui/icons/Email';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import Grid from '@material-ui/core/Grid';
+import {
+  Typography, Grid,
+} from '@material-ui/core';
+import { Email } from '@material-ui/icons';
+
+import { FixedWidthCard, PinkLockAvatar, SignInButton } from './components';
+import { PasswordField, TextFieldWithIcon } from '../components';
 
 const PASSWORD = 'password';
 const EMAIL = 'email';
-
-const useStyles = makeStyles((theme) => ({
-  pink: {
-    color: theme.palette.getContrastText(pink[500]),
-    backgroundColor: pink[500],
-  },
-  iconButton: {
-    padding: '0px',
-  },
-  submitButton: {
-    'margin-top': '24px',
-  },
-  cardContent: {
-    padding: '24px',
-  },
-  card: {
-    width: '400px',
-  },
-}));
-
-const MyTogglePasswordButton = (props) => {
-  const classes = useStyles();
-  const { children, onClick } = props;
-
-  return (
-    <IconButton
-      className={classes.iconButton}
-      onClick={onClick}
-      aria-label="toggle password visibility"
-    >
-      {
-        children()
-      }
-    </IconButton>
-  );
-};
-
-MyTogglePasswordButton.propTypes = {
-  children: propTypes.func,
-  onClick: propTypes.func,
-};
-
-MyTogglePasswordButton.defaultProps = {
-  children: () => {},
-  onClick: () => {},
-};
-
-const PinkLockAvatar = () => {
-  const classes = useStyles();
-
-  return (
-    <Avatar className={classes.pink}>
-      <LockIcon />
-    </Avatar>
-  );
-};
-
-const FixedWidthCard = (props) => {
-  const classes = useStyles();
-  const { children } = props;
-
-  return (
-    <Card className={classes.card}>
-      <CardContent className={classes.cardContent}>
-        {
-          children()
-        }
-      </CardContent>
-    </Card>
-  );
-};
-
-FixedWidthCard.propTypes = {
-  children: propTypes.func,
-};
-
-FixedWidthCard.defaultProps = {
-  children: () => {},
-};
-
-const SubmitButton = (props) => {
-  const classes = useStyles();
-  const { onClick, disabled } = props;
-
-  return (
-    <Button
-      className={classes.submitButton}
-      variant="contained"
-      fullWidth
-      onClick={onClick}
-      disabled={disabled}
-    >
-      Submit
-    </Button>
-  );
-};
-
-SubmitButton.propTypes = {
-  onClick: propTypes.func,
-  disabled: propTypes.bool,
-};
-
-SubmitButton.defaultProps = {
-  onClick: () => {},
-  disabled: false,
-};
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      [EMAIL]: {
-        isTouch: false,
-        value: '',
-        error: {},
-      },
-      [PASSWORD]: {
-        isTouch: false,
-        showPassword: false,
-        value: '',
-        error: {},
-      },
+      [EMAIL]: this.getIntialState,
+      [PASSWORD]: this.getIntialState,
     };
   }
 
-  getSchema = () => yup.object().shape({
+  getIntialState = {
+    isTouch: false,
+    value: '',
+    error: {},
+  }
+
+  getSchema = yup.object().shape({
     [EMAIL]: yup.object().shape({
       value: yup.string().required().email().label('Email'),
     }),
@@ -154,48 +36,31 @@ class Login extends React.Component {
     }),
   });
 
-  getVisibilityType = (showPassword) => (showPassword ? 'text' : 'password')
-
-  getVisibilityIcon = (showPassword) => (showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />)
-
-  handleEmailChange = (event) => {
-    const { [EMAIL]: emailComponent } = this.state;
+  handleChange = (event, field) => {
+    const { [field]: oldComponent } = this.state;
     const { value } = event.target;
-    emailComponent.value = value;
-    this.setState({ [EMAIL]: emailComponent }, () => {
-      this.validate(EMAIL);
-    });
-  }
 
-  handlePasswordChange = (event) => {
-    const { [PASSWORD]: passwordComponent } = this.state;
-    const { value } = event.target;
-    passwordComponent.value = value;
-    this.setState({ [PASSWORD]: passwordComponent }, () => {
-      this.validate(PASSWORD);
+    this.setState({
+      [field]: {
+        ...oldComponent,
+        value,
+      },
+    }, () => {
+      this.validate(field);
     });
-  }
+  };
 
-  handleEmailBlur = () => {
-    const { [EMAIL]: emailComponent } = this.state;
-    emailComponent.isTouch = true;
-    this.setState({ [EMAIL]: emailComponent }, () => {
-      this.validate(EMAIL);
+  handleBlur = (field) => {
+    const { [field]: oldComponent } = this.state;
+
+    this.setState({
+      [field]: {
+        ...oldComponent,
+        isTouch: true,
+      },
+    }, () => {
+      this.validate(field);
     });
-  }
-
-  handlePasswordBlur = () => {
-    const { [PASSWORD]: passwordComponent } = this.state;
-    passwordComponent.isTouch = true;
-    this.setState({ [PASSWORD]: passwordComponent }, () => {
-      this.validate(PASSWORD);
-    });
-  }
-
-  handlePasswordVisibilityToggle = () => {
-    const { [PASSWORD]: password } = this.state;
-    password.showPassword = !password.showPassword;
-    this.setState({ password });
   }
 
   hasErrors = () => {
@@ -212,19 +77,28 @@ class Login extends React.Component {
 
   getError = (field) => {
     const { [field]: component } = this.state;
-    return (component.isTouch && component.error.message);
+    return (component.isTouch && component.error.message) || '';
   };
 
   validate = async (args) => {
     const { state } = this;
     try {
-      await this.getSchema().validateAt(args, state);
-      state[args].error = {};
-      this.setState({ state });
+      await this.getSchema.validateAt(args, state);
+      this.setState({
+        [args]: {
+          ...state[args],
+          error: {},
+        },
+      });
     } catch (errors) {
       const { name, message } = errors;
-      state[args].error = { name, message };
-      this.setState({ state });
+
+      this.setState({
+        [args]: {
+          ...state[args],
+          error: { name, message },
+        },
+      });
     }
   }
 
@@ -237,6 +111,7 @@ class Login extends React.Component {
       [EMAIL]: email,
       [PASSWORD]: password,
     } = this.state;
+    const { getError, handleBlur, handleChange } = this;
 
     return (
       <FixedWidthCard>
@@ -248,57 +123,34 @@ class Login extends React.Component {
                 <Typography variant="h4">Login</Typography>
               </Grid>
               <form noValidate autoComplete="off">
-                <TextField
-                  error={!!this.getError(EMAIL)}
+                <TextFieldWithIcon
+                  error={!!getError(EMAIL)}
                   autoFocus
                   id="email"
                   label="EMAIL"
-                  type="text"
-                  variant="outlined"
+                  type="email"
                   value={email.value}
-                  onChange={this.handleEmailChange}
-                  onBlur={this.handleEmailBlur}
-                  margin="normal"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <EmailIcon />
-                      </InputAdornment>
-                    ),
-                  }}
+                  onChange={(event) => handleChange(event, EMAIL)}
+                  onBlur={() => handleBlur(EMAIL)}
                   fullWidth
-                  helperText={this.getError(EMAIL)}
+                  helperText={getError(EMAIL)}
+                  icon={Email}
                 />
-
-                <TextField
-                  error={!!this.getError(PASSWORD)}
-                  id="password"
-                  label="Password"
-                  variant="outlined"
+                <PasswordField
+                  error={!!getError(PASSWORD)}
+                  id="Password"
+                  label="PASSWORD"
                   value={password.value}
-                  onChange={this.handlePasswordChange}
-                  onBlur={this.handlePasswordBlur}
-                  margin="normal"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <MyTogglePasswordButton
-                          onClick={this.handlePasswordVisibilityToggle}
-                        >
-                          { () => (
-                            this.getVisibilityIcon(password.showPassword)
-                          )}
-                        </MyTogglePasswordButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  type={this.getVisibilityType(password.showPassword)}
-                  helperText={this.getError(PASSWORD)}
+                  onBlur={() => handleBlur(PASSWORD)}
+                  onChange={(event) => handleChange(event, PASSWORD)}
+                  helperText={getError(PASSWORD)}
                   fullWidth
+                  adornment="startAdornment"
+                  adornmentPosition="start"
                 />
               </form>
-              <SubmitButton
-                onClick={this.handleButtonClick}
+              <SignInButton
+                onClick={this.handleSubmitClick}
                 disabled={(!this.isTouched()) || this.hasErrors()}
               />
             </>

@@ -12,11 +12,11 @@ const Trainee = () => {
       <Route
         exact
         path={path}
-        render={(props) => <TraineeList {...props} traineeList={traineeListData} />}
+        render={(props) => <TraineeList {...props} traineeList={traineeListData} />} // eslint-disable-line
       />
       <Route
         path={`${path}/:traineeId`}
-        render={(props) => <TraineeDetail {...props} traineeList={traineeListData} />}
+        render={(props) => <TraineeDetail {...props} traineeList={traineeListData} />} // eslint-disable-line
       />
     </Switch>
   );

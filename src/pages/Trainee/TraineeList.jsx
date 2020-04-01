@@ -37,23 +37,16 @@ class TraineeList extends React.Component {
   }
 
   handleButtonClick = () => {
-    const { isOpen } = this.state;
-
-    this.setState({ isOpen: !isOpen });
+    this.setState({ isOpen: true });
   };
 
   handleDialogClose = () => {
-    const { isOpen } = this.state;
-
-    this.setState({ isOpen: !isOpen });
+    this.setState({ isOpen: false });
   };
 
   handleDialogSubmit = (data) => {
-    let { dialog } = this.state;
-    dialog = data;
-
-    this.setState({ dialog }, (updatedData) => {
-      console.log(updatedData.dialog);
+    this.setState({ dialog: data }, () => {
+      console.log(this.state.dialog);
     });
   };
 

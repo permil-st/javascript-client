@@ -5,11 +5,11 @@ import { PrivateLayout } from '../layouts';
 
 const PrivateLayoutRoute = ({ component: Component, ...rest }) => (
   <Route
-    {...rest} // eslint-disable-line
+    {...rest}  // eslint-disable-line
     render={(matchProps) => (
       <PrivateLayout>
         <Component
-          {...matchProps} // eslint-disable-line
+          {...matchProps}  // eslint-disable-line
         />
       </PrivateLayout>
     )}

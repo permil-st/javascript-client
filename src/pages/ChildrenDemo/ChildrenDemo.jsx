@@ -7,7 +7,8 @@ const ChildrenDemo = () => (
   <>
     <Math first={1} second={2} operator="+" />
     <Math first={4} second={20} operator="*" />
-    <Math first={8} second={0} operator="/" />
+    <Math first={4} second={20} operator="**" />
+    <Math first={0} second={0} operator="/" />
     <Math first={16} second={52} operator="+">
       {
         (keys) => (
@@ -17,11 +18,11 @@ const ChildrenDemo = () => (
               {' '}
               {keys.first}
               {' '}
-and
+              and
               {' '}
               {keys.second}
               {' '}
-is
+              is
               {' '}
               {keys.result}
             </Typography>

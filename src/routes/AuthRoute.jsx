@@ -10,7 +10,7 @@ const AuthLayoutRoute = ({ component: Component, ...rest }) => (
     render={(matchProps) => (
       <AuthLayout>
         <Component
-          {...matchProps} // eslint-disable-line
+          {...matchProps}    // eslint-disable-line
         />
       </AuthLayout>
     )}
