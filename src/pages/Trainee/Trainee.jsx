@@ -29,8 +29,8 @@ class Trainee extends React.Component {
   handleDialogSubmit = (data) => {
     const dialog = data;
 
-    this.setState({ dialog }, (updatedData) => {
-      console.log(updatedData.dialog);
+    this.setState({ dialog }, () => {
+      console.log(this.state.dialog);
     });
   };
 
@@ -42,7 +42,7 @@ class Trainee extends React.Component {
     return (
       <>
         <Button variant="outlined" color="primary" onClick={this.handleButtonClick}>
-          Primary
+          ADD TRAINEE
         </Button>
         <AddDialog
           open={isOpen}

@@ -236,6 +236,7 @@ class AddDialog extends React.Component {
             disabled={(!this.isTouched()) || this.hasErrors()}
             onClick={() => {
               onSubmit({ name: name.value, email: email.value, password: password.value });
+              onClose();
             }}
             color="primary"
           >

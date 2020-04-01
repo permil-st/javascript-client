@@ -114,51 +114,49 @@ class Login extends React.Component {
     const { getError, handleBlur, handleChange } = this;
 
     return (
-      <Grid container direction="row" justify="center" alignItems="center" style={{ height: '100vh' }}>
-        <FixedWidthCard>
-          {
-            () => (
-              <>
-                <Grid container direction="column" alignItems="center">
-                  <PinkLockAvatar />
-                  <Typography variant="h4">Login</Typography>
-                </Grid>
-                <form noValidate autoComplete="off">
-                  <TextFieldWithIcon
-                    error={!!getError(EMAIL)}
-                    autoFocus
-                    id="email"
-                    label="EMAIL"
-                    type="email"
-                    value={email.value}
-                    onChange={(event) => handleChange(event, EMAIL)}
-                    onBlur={() => handleBlur(EMAIL)}
-                    fullWidth
-                    helperText={getError(EMAIL)}
-                    icon={Email}
-                  />
-                  <PasswordField
-                    error={!!getError(PASSWORD)}
-                    id="Password"
-                    label="PASSWORD"
-                    value={password.value}
-                    onBlur={() => handleBlur(PASSWORD)}
-                    onChange={(event) => handleChange(event, PASSWORD)}
-                    helperText={getError(PASSWORD)}
-                    fullWidth
-                    adornment="startAdornment"
-                    adornmentPosition="start"
-                  />
-                </form>
-                <SignInButton
-                  onClick={this.handleButtonClick}
-                  disabled={(!this.isTouched()) || this.hasErrors()}
+      <FixedWidthCard>
+        {
+          () => (
+            <>
+              <Grid container direction="column" alignItems="center">
+                <PinkLockAvatar />
+                <Typography variant="h4">Login</Typography>
+              </Grid>
+              <form noValidate autoComplete="off">
+                <TextFieldWithIcon
+                  error={!!getError(EMAIL)}
+                  autoFocus
+                  id="email"
+                  label="EMAIL"
+                  type="email"
+                  value={email.value}
+                  onChange={(event) => handleChange(event, EMAIL)}
+                  onBlur={() => handleBlur(EMAIL)}
+                  fullWidth
+                  helperText={getError(EMAIL)}
+                  icon={Email}
                 />
-              </>
-            )
-          }
-        </FixedWidthCard>
-      </Grid>
+                <PasswordField
+                  error={!!getError(PASSWORD)}
+                  id="Password"
+                  label="PASSWORD"
+                  value={password.value}
+                  onBlur={() => handleBlur(PASSWORD)}
+                  onChange={(event) => handleChange(event, PASSWORD)}
+                  helperText={getError(PASSWORD)}
+                  fullWidth
+                  adornment="startAdornment"
+                  adornmentPosition="start"
+                />
+              </form>
+              <SignInButton
+                onClick={this.handleSubmitClick}
+                disabled={(!this.isTouched()) || this.hasErrors()}
+              />
+            </>
+          )
+        }
+      </FixedWidthCard>
     );
   }
 }
