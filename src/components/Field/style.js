@@ -1,18 +1,19 @@
 import styled, { css } from 'styled-components';
 
-const Form = styled.form`
+const Label = styled.h4`
 {
-  margin: 16px;
-  width: 400px;
+  font-weight: bold;
+  font-size: 14px;
 }
 `;
 
 const Item = styled.div`
 {
+  padding-bottom: 16px;
   ${(props) => props.align && css`
     display:flex;
     justify-content: end;
  `}
 `;
 
-export { Form, Item };
+export { Label, Item };

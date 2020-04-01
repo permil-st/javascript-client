@@ -1,21 +1,18 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+} from '@material-ui/core';
 
-const useStyles = makeStyles(() => ({
-  title: {
-    'margin-right': 'auto',
-  },
-  div: {
-    'margin-right': '24px',
-  },
-}));
+import useStyles from './styles';
+
+const navigateTo = (route) => {
+  window.location.href = route;
+};
 
 const handleClick = (e) => {
-  console.log(e.target.innerText);
   switch (e.target.innerText) {
   case 'TRAINEE':
     navigateTo('/trainee');
@@ -29,11 +26,13 @@ const handleClick = (e) => {
   case 'CHILDREN DEMO':
     navigateTo('/children');
     break;
+  case 'LOGIN':
+    navigateTo('/login');
+    break;
+  default:
+    navigateTo('/');
+    break;
   }
-};
-
-const navigateTo = (route) => {
-  window.location.href = route;
 };
 
 const Navbar = () => {
@@ -51,8 +50,8 @@ const Navbar = () => {
             <Button color="inherit" onClick={handleClick}>TEXTFIELD DEMO</Button>
             <Button color="inherit" onClick={handleClick}>INPUT DEMO</Button>
             <Button color="inherit" onClick={handleClick}>CHILDREN DEMO</Button>
+            <Button color="inherit" onClick={handleClick}>Login</Button>
           </div>
-          <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
       <Toolbar />

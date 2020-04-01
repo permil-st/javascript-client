@@ -18,13 +18,18 @@ const dafaultTemplate = (args) => {
 };
 
 const calculate = (first, second, operator) => {
-  const validOperators = ['+', '-', '*', '/'];
+  const validOperations = {
+    '+': first + second,
+    '-': first - second,
+    '*': first * second,
+    '/': first / second,
+  };
 
-  if (validOperators.indexOf(operator) < 0) {
+  if (validOperations[operator] === undefined) {
     throw new Error('Invalid Operator');
   }
 
-  return eval(`${first} ${operator} ${second}`);  // eslint-disable-line
+  return validOperations[operator];
 };
 
 const Math = (props) => {

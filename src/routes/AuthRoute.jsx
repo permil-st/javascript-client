@@ -6,11 +6,11 @@ import { AuthLayout } from '../layouts';
 
 const AuthLayoutRoute = ({ component: Component, ...rest }) => (
   <Route
-    {...rest}
+    {...rest}  // eslint-disable-line
     render={(matchProps) => (
       <AuthLayout>
         <Component
-          {...matchProps}
+          {...matchProps}    // eslint-disable-line
         />
       </AuthLayout>
     )}
