@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core';
 import { Email } from '@material-ui/icons';
 
-import { FixedWidthCard, PinkLockAvatar, SubmitButton } from './components';
+import { FixedWidthCard, PinkLockAvatar, SignInButton } from './components';
 import { PasswordField, TextFieldWithIcon } from '../components';
 
 const PASSWORD = 'password';
@@ -140,15 +140,17 @@ class Login extends React.Component {
                   <PasswordField
                     error={!!getError(PASSWORD)}
                     id="Password"
-                    label="Password"
+                    label="PASSWORD"
                     value={password.value}
                     onBlur={() => handleBlur(PASSWORD)}
                     onChange={(event) => handleChange(event, PASSWORD)}
                     helperText={getError(PASSWORD)}
                     fullWidth
+                    adornment="startAdornment"
+                    adornmentPosition="start"
                   />
                 </form>
-                <SubmitButton
+                <SignInButton
                   onClick={this.handleButtonClick}
                   disabled={(!this.isTouched()) || this.hasErrors()}
                 />

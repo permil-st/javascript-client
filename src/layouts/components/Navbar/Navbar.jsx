@@ -47,12 +47,12 @@ const Navbar = () => {
             TRAINEE PORTAL
           </Typography>
           <div className={classes.div}>
-            <Button color="inherit" onClick={handleClick}>TRAINEE</Button>
-            <Button color="inherit" onClick={handleClick}>TEXTFIELD DEMO</Button>
-            <Button color="inherit" onClick={handleClick}>INPUT DEMO</Button>
-            <Button color="inherit" onClick={handleClick}>CHILDREN DEMO</Button>
+            <Button color="inherit">TRAINEE</Button>
+            <Button color="inherit">TEXTFIELD DEMO</Button>
+            <Button color="inherit">INPUT DEMO</Button>
+            <Button color="inherit">CHILDREN DEMO</Button>
+            <Button color="inherit">Login</Button>
           </div>
-          <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
       <Toolbar />

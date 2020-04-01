@@ -35,13 +35,13 @@ class Trainee extends React.Component {
   };
 
   render() {
-    const { isOpen } = this.state;
-    const { dialog } = this.state; // used state to remove unused state error
-    console.log(dialog);
+    const { isOpen, dialog } = this.state;
+
+    console.log(dialog); // used state to remove unused state error
 
     return (
       <>
-        <Button variant="contained" onClick={this.handleButtonClick}>
+        <Button variant="outlined" color="primary" onClick={this.handleButtonClick}>
           Primary
         </Button>
         <AddDialog
