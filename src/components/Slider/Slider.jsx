@@ -37,7 +37,6 @@ class Slider extends React.Component {
       if (random) {
         return getRandomNumber(banners.length);
       }
-
       return getNextRoundRobin(banners.length, currentImage);
     }
     return -1;
