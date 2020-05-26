@@ -1,12 +1,11 @@
 import React from 'react';
 import * as yup from 'yup';
-import {
-  Typography, Grid,
-} from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 import { Email } from '@material-ui/icons';
 
 import { FixedWidthCard, PinkLockAvatar, SignInButton } from './components';
 import { PasswordField, TextFieldWithIcon } from '../components';
+import FullHeightGrid from './styles';
 
 const PASSWORD = 'password';
 const EMAIL = 'email';
@@ -81,10 +80,10 @@ class Login extends React.Component {
   };
 
   validate = async (args) => {
-    const { state } = this;
+    const { state, getSchema, setState } = this;
     try {
-      await this.getSchema.validateAt(args, state);
-      this.setState({
+      await getSchema.validateAt(args, state);
+      setState({
         [args]: {
           ...state[args],
           error: {},
@@ -93,7 +92,7 @@ class Login extends React.Component {
     } catch (errors) {
       const { name, message } = errors;
 
-      this.setState({
+      setState({
         [args]: {
           ...state[args],
           error: { name, message },
@@ -114,7 +113,7 @@ class Login extends React.Component {
     const { getError, handleBlur, handleChange } = this;
 
     return (
-      <Grid container direction="row" justify="center" alignItems="center" style={{ height: '100vh' }}>
+      <FullHeightGrid container direction="row" justify="center" alignItems="center">
         <FixedWidthCard>
           {
             () => (
@@ -158,7 +157,7 @@ class Login extends React.Component {
             )
           }
         </FixedWidthCard>
-      </Grid>
+      </FullHeightGrid>
     );
   }
 }

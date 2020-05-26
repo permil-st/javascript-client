@@ -1,9 +1,8 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 
-const useStyles = makeStyles(() => ({
-  iconButton: {
-    padding: '0px',
-  },
-}));
+const FullHeightGrid = styled(Grid)({
+  height: '100vh',
+});
 
-export default useStyles;
+export default FullHeightGrid;
