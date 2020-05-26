@@ -2,6 +2,8 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 
 import { AddDialog } from './components';
+import { Navbar } from '../components';
+import DivWithPadding from './styles';
 
 
 class Trainee extends React.Component {
@@ -35,20 +37,25 @@ class Trainee extends React.Component {
   };
 
   render() {
-    const { isOpen } = this.state;
-    const { dialog } = this.state; // used state to remove unused state error
-    console.log(dialog);
+    const { isOpen, dialog } = this.state;
+
+    console.log(dialog); // used state to remove unused state error
 
     return (
       <>
-        <Button variant="contained" onClick={this.handleButtonClick}>
-          Primary
-        </Button>
-        <AddDialog
-          open={isOpen}
-          onClose={this.handleDialogClose}
-          onSubmit={this.handleDialogSubmit}
-        />
+        <Navbar />
+        <DivWithPadding>
+          <>
+            <Button variant="outlined" color="primary" onClick={this.handleButtonClick}>
+              ADD TRAINEE
+            </Button>
+            <AddDialog
+              open={isOpen}
+              onClose={this.handleDialogClose}
+              onSubmit={this.handleDialogSubmit}
+            />
+          </>
+        </DivWithPadding>
       </>
     );
   }
