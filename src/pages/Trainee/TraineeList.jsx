@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Table, Grid } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 
-import { AddDialog } from './components';
+import { AddDialog, Table } from './components';
 import TraineeListField from './TraineeListField';
 
 class TraineeList extends React.Component {
