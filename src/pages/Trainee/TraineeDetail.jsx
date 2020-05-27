@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { useRouteMatch, useParams } from 'react-router-dom';
+import { useRouteMatch, useParams, useHistory } from 'react-router-dom';
 import {
   CardContent, Card, CardMedia, Typography, Button, Grid,
 } from '@material-ui/core';
@@ -26,6 +26,7 @@ const TraineeDetail = (props) => {
   const { traineeList } = props;
   const classes = useStyles();
   const { path } = useRouteMatch();
+  const history = useHistory();
 
   const trainee = traineeList.filter((element) => element.id === traineeId)[0];
 
@@ -55,7 +56,11 @@ const TraineeDetail = (props) => {
         </CardContent>
       </Card>
       <Grid container justify="center">
-        <Button className={classes.button} variant="contained" href={path.split(':')[0]}>
+        <Button
+          className={classes.button}
+          variant="contained"
+          onClick={() => { history.push(path.split(':')[0]); }}
+        >
           BACK
         </Button>
       </Grid>

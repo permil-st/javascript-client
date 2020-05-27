@@ -1,30 +1,9 @@
 import React from 'react';
-import { useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {
-  Button, List, ListItem, ListItemText,
-} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
 import { AddDialog } from './components';
-
-const TraineeListField = (props) => {
-  const { traineeList } = props;
-  const { path } = useRouteMatch();
-
-  return (
-    <List>
-      { (traineeList && traineeList.map((key) => (
-        <ListItem button component="a" href={`${path}/${key.id}`}>
-          <ListItemText primary={key.name} />
-        </ListItem>
-      ))) || '' }
-    </List>
-  );
-};
-
-TraineeListField.propTypes = {
-  traineeList: PropTypes.arrayOf(PropTypes.object).isRequired,
-};
+import TraineeListField from './TraineeListField';
 
 class TraineeList extends React.Component {
   constructor(props) {
