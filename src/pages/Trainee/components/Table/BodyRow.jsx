@@ -3,14 +3,32 @@ import PropTypes from 'prop-types';
 import { TableRow } from '@material-ui/core';
 
 import Cell from './Cell';
+import useStyles from './styles';
 
 const BodyRow = (props) => {
-  const { row, columns } = props;
+  const { row, columns, onSelect } = props;
+
+  const classes = useStyles();
+
   return (
-    <TableRow>
+    <TableRow
+      className={classes.row}
+      hover
+      onClick={(event) => {
+        if (onSelect) {
+          onSelect(event, row);
+        }
+      }}
+    >
       {
         columns && columns.map((cell) => (
-          <Cell value={row[cell.field]} align={cell.align} />
+          <Cell
+            key={cell.field}
+            value={(cell.format) ? cell.format(row[cell.field]) : row[cell.field]}
+            align={cell.align}
+            column={cell.field}
+            row={row}
+          />
         ))
       }
     </TableRow>
@@ -18,8 +36,9 @@ const BodyRow = (props) => {
 };
 
 BodyRow.propTypes = {
-  row: PropTypes.string.isRequired,
+  row: PropTypes.instanceOf(PropTypes.any).isRequired,
   columns: PropTypes.arrayOf(PropTypes.instanceOf(PropTypes.any)).isRequired,
+  onSelect: PropTypes.func.isRequired,
 };
 
 export default BodyRow;

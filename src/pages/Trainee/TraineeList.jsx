@@ -4,6 +4,7 @@ import { Button, Grid } from '@material-ui/core';
 
 import { AddDialog, Table } from './components';
 import TraineeListField from './TraineeListField';
+import { getDateFormatted } from '../../lib';
 
 class TraineeList extends React.Component {
   constructor(props) {
@@ -12,6 +13,8 @@ class TraineeList extends React.Component {
     this.state = {
       isOpen: false,
       dialog: {},
+      orderBy: '',
+      order: '',
     };
   }
 
@@ -31,9 +34,21 @@ class TraineeList extends React.Component {
     });
   };
 
+  handleSelect = (event, row) => {
+    console.log(event);
+    console.log(row);
+  }
+
+  handleSort = (column, order) => {
+    this.setState({ orderBy: column, order });
+  }
+
   render() {
-    const { isOpen } = this.state;
+    const { isOpen, orderBy, order } = this.state;
     const { traineeList } = this.props;
+    const {
+      handleSelect, handleSort, handleButtonClick, handleDialogSubmit, handleDialogClose,
+    } = this;
     const columns = [
       {
         field: 'name',
@@ -42,21 +57,35 @@ class TraineeList extends React.Component {
       }, {
         field: 'email',
         label: 'E-mail',
+        format: (value) => value && value.toUpperCase(),
+      }, {
+        field: 'createdAt',
+        label: 'Date',
+        align: 'right',
+        format: getDateFormatted,
       },
     ];
 
     return (
       <>
         <Grid container justify="flex-end">
-          <Button variant="outlined" color="primary" onClick={this.handleButtonClick}>
+          <Button variant="outlined" color="primary" onClick={handleButtonClick}>
             ADD TRAINEELIST
           </Button>
         </Grid>
-        <Table id="trainee" columns={columns} data={traineeList} />
+        <Table
+          id="trainee"
+          columns={columns}
+          data={traineeList}
+          orderBy={orderBy}
+          order={order}
+          onSelect={handleSelect}
+          onSort={handleSort}
+        />
         <AddDialog
           open={isOpen}
-          onClose={this.handleDialogClose}
-          onSubmit={this.handleDialogSubmit}
+          onClose={handleDialogClose}
+          onSubmit={handleDialogSubmit}
         />
         <TraineeListField traineeList={traineeList} />
       </>
