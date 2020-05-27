@@ -20,7 +20,7 @@ const Navbar = () => {
   const handleClick = (e) => {
     switch (e.target.innerText) {
     case 'TRAINEE':
-      return navigateTo('/', history);
+      return navigateTo('/trainee', history);
     case 'TEXTFIELD DEMO':
       return navigateTo('/text-field-demo', history);
     case 'INPUT DEMO':

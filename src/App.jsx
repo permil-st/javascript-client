@@ -19,7 +19,7 @@ function App() {
       <Router>
         <Switch>
           <AuthLayoutRoute path="/login" component={Login} />
-          <PrivateLayoutRoute exact path="/" component={Trainee} />
+          <PrivateLayoutRoute path="/trainee" component={Trainee} />
           <PrivateLayoutRoute path="/children" component={ChildrenDemo} />
           <PrivateLayoutRoute path="/input-demo" component={InputDemo} />
           <PrivateLayoutRoute path="/text-field-demo" component={TextFieldDemo} />

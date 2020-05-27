@@ -1,57 +1,25 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import TraineeList from './TraineeList';
+import TraineeDetail from './TraineeDetail';
+import traineeListData from './data/trainee';
 
-import { AddDialog } from './components';
+const Trainee = () => {
+  const { path } = useRouteMatch();
 
-
-class Trainee extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isOpen: false,
-      dialog: {},
-    };
-  }
-
-  handleButtonClick = () => {
-    const { isOpen } = this.state;
-
-    this.setState({ isOpen: !isOpen });
-  };
-
-  handleDialogClose = () => {
-    const { isOpen } = this.state;
-
-    this.setState({ isOpen: !isOpen });
-  };
-
-  handleDialogSubmit = (data) => {
-    const dialog = data;
-
-    this.setState({ dialog }, () => {
-      console.log(this.state.dialog);
-    });
-  };
-
-  render() {
-    const { isOpen, dialog } = this.state;
-
-    console.log(dialog); // used state to remove unused state error
-
-    return (
-      <>
-        <Button variant="outlined" color="primary" onClick={this.handleButtonClick}>
-          ADD TRAINEE
-        </Button>
-        <AddDialog
-          open={isOpen}
-          onClose={this.handleDialogClose}
-          onSubmit={this.handleDialogSubmit}
-        />
-      </>
-    );
-  }
-}
+  return (
+    <Switch>
+      <Route
+        exact
+        path={path}
+        render={(props) => <TraineeList {...props} traineeList={traineeListData} />} // eslint-disable-line
+      />
+      <Route
+        path={`${path}/:traineeId`}
+        render={(props) => <TraineeDetail {...props} traineeList={traineeListData} />} // eslint-disable-line
+      />
+    </Switch>
+  );
+};
 
 export default Trainee;

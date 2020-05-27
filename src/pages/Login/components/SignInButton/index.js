@@ -1,1 +1,1 @@
-export { default as SignInButton } from './SignIn';
+export { default as SignInButton } from './SignInButton';
