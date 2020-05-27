@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -8,35 +9,30 @@ import {
 
 import useStyles from './styles';
 
-const navigateTo = (route) => {
-  window.location.href = route;
-};
-
-const handleClick = (e) => {
-  switch (e.target.innerText) {
-  case 'TRAINEE':
-    navigateTo('/trainee');
-    break;
-  case 'TEXTFIELD DEMO':
-    navigateTo('/text-field-demo');
-    break;
-  case 'INPUT DEMO':
-    navigateTo('/input-demo');
-    break;
-  case 'CHILDREN DEMO':
-    navigateTo('/children');
-    break;
-  case 'LOGIN':
-    navigateTo('/login');
-    break;
-  default:
-    navigateTo('/');
-    break;
-  }
+const navigateTo = (route, history) => {
+  history.push(route);
 };
 
 const Navbar = () => {
   const classes = useStyles();
+  const history = useHistory();
+
+  const handleClick = (e) => {
+    switch (e.target.innerText) {
+    case 'TRAINEE':
+      return navigateTo('/trainee', history);
+    case 'TEXTFIELD DEMO':
+      return navigateTo('/text-field-demo', history);
+    case 'INPUT DEMO':
+      return navigateTo('/input-demo', history);
+    case 'CHILDREN DEMO':
+      return navigateTo('/children', history);
+    case 'LOGIN':
+      return navigateTo('/login', history);
+    default:
+      return navigateTo('/', history);
+    }
+  };
 
   return (
     <>

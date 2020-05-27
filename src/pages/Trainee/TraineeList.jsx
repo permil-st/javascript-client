@@ -1,30 +1,9 @@
 import React from 'react';
-import { useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {
-  Button, List, ListItem, ListItemText, Grid,
-} from '@material-ui/core';
+import { Button, Table, Grid } from '@material-ui/core';
 
-import { AddDialog, Table } from './components';
-
-const TraineeListField = (props) => {
-  const { traineeList } = props;
-  const { path } = useRouteMatch();
-
-  return (
-    <List>
-      { (traineeList && traineeList.map((key) => (
-        <ListItem button component="a" href={`${path}/${key.id}`}>
-          <ListItemText primary={key.name} />
-        </ListItem>
-      ))) || '' }
-    </List>
-  );
-};
-
-TraineeListField.propTypes = {
-  traineeList: PropTypes.arrayOf(PropTypes.object).isRequired,
-};
+import { AddDialog } from './components';
+import TraineeListField from './TraineeListField';
 
 class TraineeList extends React.Component {
   constructor(props) {
@@ -45,8 +24,10 @@ class TraineeList extends React.Component {
   };
 
   handleDialogSubmit = (data) => {
+    const { dialog } = this.state;
+
     this.setState({ dialog: data }, () => {
-      console.log(this.state.dialog);
+      console.log(dialog);
     });
   };
 
