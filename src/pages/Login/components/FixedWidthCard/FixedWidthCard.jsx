@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { object } from 'prop-types';
 import { Card, CardContent } from '@material-ui/core';
 
 import useStyles from './styles';
@@ -11,20 +11,18 @@ const FixedWidthCard = (props) => {
   return (
     <Card className={classes.card}>
       <CardContent className={classes.cardContent}>
-        {
-          children()
-        }
+        {children}
       </CardContent>
     </Card>
   );
 };
 
 FixedWidthCard.propTypes = {
-  children: PropTypes.func,
+  children: PropTypes.instanceOf(object),
 };
 
 FixedWidthCard.defaultProps = {
-  children: () => {},
+  children: (<></>),
 };
 
 export default FixedWidthCard;

@@ -1,8 +1,6 @@
 import React from 'react';
 import * as yup from 'yup';
-import {
-  Typography, Grid,
-} from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 import { Email } from '@material-ui/icons';
 
 import { FixedWidthCard, PinkLockAvatar, SignInButton } from './components';
@@ -81,9 +79,9 @@ class Login extends React.Component {
   };
 
   validate = async (args) => {
-    const { state } = this;
+    const { state, getSchema } = this;
     try {
-      await this.getSchema.validateAt(args, state);
+      await getSchema.validateAt(args, state);
       this.setState({
         [args]: {
           ...state[args],
@@ -115,47 +113,43 @@ class Login extends React.Component {
 
     return (
       <FixedWidthCard>
-        {
-          () => (
-            <>
-              <Grid container direction="column" alignItems="center">
-                <PinkLockAvatar />
-                <Typography variant="h4">Login</Typography>
-              </Grid>
-              <form noValidate autoComplete="off">
-                <TextFieldWithIcon
-                  error={!!getError(EMAIL)}
-                  autoFocus
-                  id="email"
-                  label="EMAIL"
-                  type="email"
-                  value={email.value}
-                  onChange={(event) => handleChange(event, EMAIL)}
-                  onBlur={() => handleBlur(EMAIL)}
-                  fullWidth
-                  helperText={getError(EMAIL)}
-                  icon={Email}
-                />
-                <PasswordField
-                  error={!!getError(PASSWORD)}
-                  id="Password"
-                  label="PASSWORD"
-                  value={password.value}
-                  onBlur={() => handleBlur(PASSWORD)}
-                  onChange={(event) => handleChange(event, PASSWORD)}
-                  helperText={getError(PASSWORD)}
-                  fullWidth
-                  adornment="startAdornment"
-                  adornmentPosition="start"
-                />
-              </form>
-              <SignInButton
-                onClick={this.handleSubmitClick}
-                disabled={(!this.isTouched()) || this.hasErrors()}
-              />
-            </>
-          )
-        }
+        <>
+          <Grid container direction="column" alignItems="center">
+            <PinkLockAvatar />
+            <Typography variant="h4">Login</Typography>
+          </Grid>
+          <form noValidate autoComplete="off">
+            <TextFieldWithIcon
+              error={!!getError(EMAIL)}
+              autoFocus
+              id="email"
+              label="EMAIL"
+              type="email"
+              value={email.value}
+              onChange={(event) => handleChange(event, EMAIL)}
+              onBlur={() => handleBlur(EMAIL)}
+              fullWidth
+              helperText={getError(EMAIL)}
+              icon={Email}
+            />
+            <PasswordField
+              error={!!getError(PASSWORD)}
+              id="Password"
+              label="PASSWORD"
+              value={password.value}
+              onBlur={() => handleBlur(PASSWORD)}
+              onChange={(event) => handleChange(event, PASSWORD)}
+              helperText={getError(PASSWORD)}
+              fullWidth
+              adornment="startAdornment"
+              adornmentPosition="start"
+            />
+          </form>
+          <SignInButton
+            onClick={this.handleSubmitClick}
+            disabled={(!this.isTouched()) || this.hasErrors()}
+          />
+        </>
       </FixedWidthCard>
     );
   }
