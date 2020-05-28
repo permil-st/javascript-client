@@ -10,7 +10,7 @@ import useStyles from './styles';
 
 const GenericTable = (props) => {
   const {
-    id, columns, data, order, orderBy, onSort, onSelect,
+    id, columns, data, order, orderBy, onSort, onSelect, keyField,
     render, count, rowsPerPage, onChangePage, page, actions,
   } = props;
 
@@ -33,7 +33,7 @@ const GenericTable = (props) => {
             {
               data && data.map((row) => (
                 <BodyRow
-                  key={row}
+                  key={row[keyField]}
                   columns={columns}
                   row={row}
                   onSelect={onSelect}
@@ -51,6 +51,7 @@ const GenericTable = (props) => {
             component="div"
             count={count}
             rowsPerPage={rowsPerPage}
+            rowsPerPageOptions={[]}
             page={page}
             onChangePage={onChangePage}
           />
@@ -63,14 +64,15 @@ const GenericTable = (props) => {
 
 GenericTable.propTypes = {
   id: PropTypes.string.isRequired,
-  columns: PropTypes.arrayOf(PropTypes.instanceOf(PropTypes.object)).isRequired,
-  data: PropTypes.arrayOf(PropTypes.instanceOf(PropTypes.object)).isRequired,
+  columns: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
+  data: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
+  keyField: PropTypes.string,
   orderBy: PropTypes.string,
   order: PropTypes.string,
   onSort: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
   render: PropTypes.func,
-  actions: PropTypes.arrayOf(PropTypes.instanceOf(PropTypes.object)),
+  actions: PropTypes.arrayOf(PropTypes.object),
   count: PropTypes.number,
   page: PropTypes.number,
   onChangePage: PropTypes.func,
@@ -85,6 +87,7 @@ GenericTable.defaultProps = {
   count: 0,
   page: 0,
   rowsPerPage: 100,
+  keyField: 'id',
   onChangePage: () => {},
 };
 

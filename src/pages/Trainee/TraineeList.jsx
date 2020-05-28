@@ -116,10 +116,12 @@ class TraineeList extends React.Component {
     const actions = [
       {
         icon: <Edit />,
+        key: 'Edit',
         handler: handleEditDialogOpen,
       },
       {
         icon: <Delete />,
+        key: 'Delete',
         handler: handleRemoveDialogOpen,
       },
     ];

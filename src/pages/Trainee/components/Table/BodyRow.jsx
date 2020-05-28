@@ -38,11 +38,16 @@ const BodyRow = (props) => {
 
         actions && (
           <Cell
+            column="Actions"
+            row={row}
             render={() => (
               <>
                 {
                   actions.map((action) => (
-                    <IconButton onClick={(event) => { action.handler(event, row); }}>
+                    <IconButton
+                      key={action.key}
+                      onClick={(event) => { action.handler(event, row); }}
+                    >
                       {action.icon}
                     </IconButton>
                   ))
@@ -57,11 +62,11 @@ const BodyRow = (props) => {
 };
 
 BodyRow.propTypes = {
-  row: PropTypes.instanceOf(PropTypes.object).isRequired,
-  columns: PropTypes.arrayOf(PropTypes.instanceOf(PropTypes.object)).isRequired,
+  row: PropTypes.objectOf(PropTypes.any).isRequired,
+  columns: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
   onSelect: PropTypes.func.isRequired,
   render: PropTypes.func,
-  actions: PropTypes.arrayOf(PropTypes.instanceOf(PropTypes.object)),
+  actions: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 };
 
 BodyRow.defaultProps = {

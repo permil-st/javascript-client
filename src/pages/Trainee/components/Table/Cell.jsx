@@ -18,16 +18,17 @@ const Cell = (props) => {
 };
 
 Cell.propTypes = {
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   align: PropTypes.string,
   column: PropTypes.string.isRequired,
-  row: PropTypes.instanceOf(PropTypes.object).isRequired,
+  row: PropTypes.objectOf(PropTypes.any).isRequired,
   render: PropTypes.func,
 };
 
 Cell.defaultProps = {
   render: undefined,
   align: 'left',
+  value: '',
 };
 
 export default Cell;

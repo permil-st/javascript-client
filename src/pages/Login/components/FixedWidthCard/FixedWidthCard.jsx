@@ -18,7 +18,7 @@ const FixedWidthCard = (props) => {
 };
 
 FixedWidthCard.propTypes = {
-  children: PropTypes.instanceOf(PropTypes.any),
+  children: PropTypes.objectOf(PropTypes.any),
 };
 
 FixedWidthCard.defaultProps = {

@@ -24,7 +24,7 @@ const HeaderRow = (props) => {
               value={label || field}
               align={align}
               column={label || field}
-              row={columns}
+              row={{}}
               render={(value) => (
                 <TableSortLabel
                   active={orderBy === field}
@@ -43,7 +43,7 @@ const HeaderRow = (props) => {
       }
       {
         (actions) && (
-          <Cell />
+          <Cell column="Actions" row={{}} />
         )
       }
     </TableRow>
@@ -51,7 +51,7 @@ const HeaderRow = (props) => {
 };
 
 HeaderRow.propTypes = {
-  columns: PropTypes.arrayOf(PropTypes.instanceOf(PropTypes.object)).isRequired,
+  columns: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
   orderBy: PropTypes.string.isRequired,
   order: PropTypes.string.isRequired,
   onSort: PropTypes.func.isRequired,

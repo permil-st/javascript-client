@@ -203,7 +203,7 @@ EditDialog.propTypes = {
   open: propTypes.bool.isRequired,
   onClose: propTypes.func.isRequired,
   onSubmit: propTypes.func.isRequired,
-  row: propTypes.instanceOf(propTypes.object).isRequired,
+  row: propTypes.objectOf(propTypes.object).isRequired,
 };
 
 export default EditDialog;
