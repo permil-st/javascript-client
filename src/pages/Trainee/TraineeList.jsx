@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 
-import { AddDialog } from './components';
+import { AddDialog, Table } from './components';
 import TraineeListField from './TraineeListField';
 
 class TraineeList extends React.Component {
@@ -24,20 +24,35 @@ class TraineeList extends React.Component {
   };
 
   handleDialogSubmit = (data) => {
+    const { dialog } = this.state;
+
     this.setState({ dialog: data }, () => {
-      console.log(this.state.dialog);
+      console.log(dialog);
     });
   };
 
   render() {
     const { isOpen } = this.state;
     const { traineeList } = this.props;
+    const columns = [
+      {
+        field: 'name',
+        align: 'center',
+        label: 'Name',
+      }, {
+        field: 'email',
+        label: 'E-mail',
+      },
+    ];
 
     return (
       <>
-        <Button variant="outlined" color="primary" onClick={this.handleButtonClick}>
-          ADD TRAINEE
-        </Button>
+        <Grid container justify="flex-end">
+          <Button variant="outlined" color="primary" onClick={this.handleButtonClick}>
+            ADD TRAINEELIST
+          </Button>
+        </Grid>
+        <Table id="trainee" columns={columns} data={traineeList} />
         <AddDialog
           open={isOpen}
           onClose={this.handleDialogClose}
