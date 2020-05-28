@@ -10,7 +10,7 @@ const toggleOrder = (order) => {
 
 const HeaderRow = (props) => {
   const {
-    columns, order, orderBy, onSort,
+    columns, order, orderBy, onSort, actions,
   } = props;
 
   return (
@@ -41,15 +41,21 @@ const HeaderRow = (props) => {
           );
         })
       }
+      {
+        (actions) && (
+          <Cell />
+        )
+      }
     </TableRow>
   );
 };
 
 HeaderRow.propTypes = {
-  columns: PropTypes.arrayOf(PropTypes.instanceOf(PropTypes.any)).isRequired,
+  columns: PropTypes.arrayOf(PropTypes.instanceOf(PropTypes.object)).isRequired,
   orderBy: PropTypes.string.isRequired,
   order: PropTypes.string.isRequired,
   onSort: PropTypes.func.isRequired,
+  actions: PropTypes.bool.isRequired,
 };
 
 export default HeaderRow;

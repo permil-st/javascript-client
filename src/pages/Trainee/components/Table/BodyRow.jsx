@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TableRow } from '@material-ui/core';
+import { TableRow, IconButton } from '@material-ui/core';
 
 import Cell from './Cell';
 import useStyles from './styles';
 
 const BodyRow = (props) => {
   const {
-    row, columns, onSelect, render,
+    row, columns, onSelect, render, actions,
   } = props;
 
   const classes = useStyles();
@@ -34,19 +34,39 @@ const BodyRow = (props) => {
           />
         ))
       }
+      {
+
+        actions && (
+          <Cell
+            render={() => (
+              <>
+                {
+                  actions.map((action) => (
+                    <IconButton onClick={(event) => { action.handler(event, row); }}>
+                      {action.icon}
+                    </IconButton>
+                  ))
+                }
+              </>
+            )}
+          />
+        )
+      }
     </TableRow>
   );
 };
 
 BodyRow.propTypes = {
-  row: PropTypes.instanceOf(PropTypes.any).isRequired,
-  columns: PropTypes.arrayOf(PropTypes.instanceOf(PropTypes.any)).isRequired,
+  row: PropTypes.instanceOf(PropTypes.object).isRequired,
+  columns: PropTypes.arrayOf(PropTypes.instanceOf(PropTypes.object)).isRequired,
   onSelect: PropTypes.func.isRequired,
   render: PropTypes.func,
+  actions: PropTypes.arrayOf(PropTypes.instanceOf(PropTypes.object)),
 };
 
 BodyRow.defaultProps = {
   render: undefined,
+  actions: undefined,
 };
 
 export default BodyRow;

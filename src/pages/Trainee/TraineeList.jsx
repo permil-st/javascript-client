@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Grid } from '@material-ui/core';
+import { Edit, Delete } from '@material-ui/icons';
 
-import { AddDialog, Table } from './components';
+import {
+  AddDialog, DeleteDialog, EditDialog, Table,
+} from './components';
 import TraineeListField from './TraineeListField';
 import { getDateFormatted } from '../../lib';
 
@@ -11,19 +14,26 @@ class TraineeList extends React.Component {
     super(props);
 
     this.state = {
-      isOpen: false,
+      isOpenAddDialog: false,
+      isOpenEditDialog: false,
+      isOpenDeleteDialog: false,
+      deleteRow: {},
+      editRow: {},
       dialog: {},
       orderBy: '',
       order: '',
+      count: 100,
+      page: 0,
+      rowsPerPage: 10,
     };
   }
 
   handleButtonClick = () => {
-    this.setState({ isOpen: true });
+    this.setState({ isOpenAddDialog: true });
   };
 
   handleDialogClose = () => {
-    this.setState({ isOpen: false });
+    this.setState({ isOpenAddDialog: false });
   };
 
   handleDialogSubmit = (data) => {
@@ -34,20 +44,57 @@ class TraineeList extends React.Component {
     });
   };
 
-  handleSelect = (event, row) => {
-    console.log(event);
-    console.log(row);
+  handleSelect = () => {
+    // console.log(event);
+    // console.log(row);
   }
 
   handleSort = (column, order) => {
     this.setState({ orderBy: column, order });
   }
 
+  handlePageChange = (event, page) => {
+    this.setState({ page });
+  }
+
+  handleEditDialogOpen = (event, row) => {
+    this.setState({ isOpenEditDialog: true, editRow: row });
+  }
+
+  handleEditDialogClose = () => {
+    this.setState({ isOpenEditDialog: false });
+  }
+
+  handleEditDialogSubmit = (data, row) => {
+    console.log('Data Modified');
+    console.log('new Data', data);
+    console.log('Original data', row);
+  }
+
+  handleRemoveDialogOpen = (event, row) => {
+    this.setState({ isOpenDeleteDialog: true, deleteRow: row });
+  }
+
+  handleRemoveDialogClose = () => {
+    this.setState({ isOpenDeleteDialog: false });
+  }
+
+  handleRemoveDialogSubmit = (row) => {
+    console.log('Data Removed');
+    console.log(row);
+  }
+
   render() {
-    const { isOpen, orderBy, order } = this.state;
+    const {
+      isOpenAddDialog, isOpenEditDialog, isOpenDeleteDialog,
+      orderBy, order, count, page, rowsPerPage, deleteRow, editRow,
+    } = this.state;
     const { traineeList } = this.props;
     const {
-      handleSelect, handleSort, handleButtonClick, handleDialogSubmit, handleDialogClose,
+      handleSelect, handleSort, handlePageChange,
+      handleEditDialogOpen, handleEditDialogClose, handleEditDialogSubmit,
+      handleButtonClick, handleDialogSubmit, handleDialogClose,
+      handleRemoveDialogOpen, handleRemoveDialogClose, handleRemoveDialogSubmit,
     } = this;
     const columns = [
       {
@@ -66,6 +113,17 @@ class TraineeList extends React.Component {
       },
     ];
 
+    const actions = [
+      {
+        icon: <Edit />,
+        handler: handleEditDialogOpen,
+      },
+      {
+        icon: <Delete />,
+        handler: handleRemoveDialogOpen,
+      },
+    ];
+
     return (
       <>
         <Grid container justify="flex-end">
@@ -79,13 +137,30 @@ class TraineeList extends React.Component {
           data={traineeList}
           orderBy={orderBy}
           order={order}
+          actions={actions}
           onSelect={handleSelect}
           onSort={handleSort}
+          count={count}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          onChangePage={handlePageChange}
         />
         <AddDialog
-          open={isOpen}
+          open={isOpenAddDialog}
           onClose={handleDialogClose}
           onSubmit={handleDialogSubmit}
+        />
+        <DeleteDialog
+          open={isOpenDeleteDialog}
+          row={deleteRow}
+          onClose={handleRemoveDialogClose}
+          onSubmit={handleRemoveDialogSubmit}
+        />
+        <EditDialog
+          open={isOpenEditDialog}
+          row={editRow}
+          onClose={handleEditDialogClose}
+          onSubmit={handleEditDialogSubmit}
         />
         <TraineeListField traineeList={traineeList} />
       </>

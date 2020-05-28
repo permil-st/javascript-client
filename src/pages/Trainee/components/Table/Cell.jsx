@@ -21,7 +21,7 @@ Cell.propTypes = {
   value: PropTypes.string.isRequired,
   align: PropTypes.string,
   column: PropTypes.string.isRequired,
-  row: PropTypes.instanceOf(PropTypes.any).isRequired,
+  row: PropTypes.instanceOf(PropTypes.object).isRequired,
   render: PropTypes.func,
 };
 
