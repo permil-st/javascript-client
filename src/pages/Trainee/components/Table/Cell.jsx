@@ -11,7 +11,7 @@ const Cell = (props) => {
   const classes = useStyles();
 
   return (
-    <TableCell className={classes.cell} align={align || 'left'}>
+    <TableCell className={classes.cell} align={align}>
       { (render && render(value, column, row)) || value }
     </TableCell>
   );
@@ -19,7 +19,7 @@ const Cell = (props) => {
 
 Cell.propTypes = {
   value: PropTypes.string.isRequired,
-  align: PropTypes.string.isRequired,
+  align: PropTypes.string,
   column: PropTypes.string.isRequired,
   row: PropTypes.instanceOf(PropTypes.any).isRequired,
   render: PropTypes.func,
@@ -27,6 +27,7 @@ Cell.propTypes = {
 
 Cell.defaultProps = {
   render: undefined,
+  align: 'left',
 };
 
 export default Cell;

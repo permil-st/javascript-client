@@ -6,7 +6,9 @@ import Cell from './Cell';
 import useStyles from './styles';
 
 const BodyRow = (props) => {
-  const { row, columns, onSelect } = props;
+  const {
+    row, columns, onSelect, render,
+  } = props;
 
   const classes = useStyles();
 
@@ -28,6 +30,7 @@ const BodyRow = (props) => {
             align={cell.align}
             column={cell.field}
             row={row}
+            render={render}
           />
         ))
       }
@@ -39,6 +42,11 @@ BodyRow.propTypes = {
   row: PropTypes.instanceOf(PropTypes.any).isRequired,
   columns: PropTypes.arrayOf(PropTypes.instanceOf(PropTypes.any)).isRequired,
   onSelect: PropTypes.func.isRequired,
+  render: PropTypes.func,
+};
+
+BodyRow.defaultProps = {
+  render: undefined,
 };
 
 export default BodyRow;

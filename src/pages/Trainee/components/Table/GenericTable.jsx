@@ -10,7 +10,7 @@ import useStyles from './styles';
 
 const GenericTable = (props) => {
   const {
-    id, columns, data, order, orderBy, onSort, onSelect,
+    id, columns, data, order, orderBy, onSort, onSelect, render,
   } = props;
   const classes = useStyles();
   return (
@@ -22,7 +22,7 @@ const GenericTable = (props) => {
         <TableBody>
           {
             data && data.map((row) => (
-              <BodyRow columns={columns} row={row} onSelect={onSelect} />
+              <BodyRow key={row} columns={columns} row={row} onSelect={onSelect} render={render} />
             ))
           }
         </TableBody>
@@ -39,11 +39,13 @@ GenericTable.propTypes = {
   order: PropTypes.string,
   onSort: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
+  render: PropTypes.func,
 };
 
 GenericTable.defaultProps = {
   orderBy: '',
   order: 'asc',
+  render: undefined,
 };
 
 export default GenericTable;

@@ -20,6 +20,7 @@ const HeaderRow = (props) => {
           const { field, label, align } = cell;
           return (
             <Cell
+              key={field}
               value={label || field}
               align={align}
               column={label || field}
