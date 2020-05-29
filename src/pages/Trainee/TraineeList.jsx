@@ -8,6 +8,7 @@ import {
 } from './components';
 import TraineeListField from './TraineeListField';
 import { getDateFormatted } from '../../lib';
+import { SharedSnackBarContextConsumer } from '../../contexts';
 
 class TraineeList extends React.Component {
   constructor(props) {
@@ -66,9 +67,13 @@ class TraineeList extends React.Component {
   }
 
   handleEditDialogSubmit = (data, row) => {
+    const { openSnackBar } = this.context;
     console.log('Data Modified');
-    console.log('new Data', data);
-    console.log('Original data', row);
+    if (new Date(row.createdAt) < new Date('2019-02-14')) {
+      openSnackBar('This is a success message', 'success');
+    } else {
+      openSnackBar('This is an error message', 'error');
+    }
   }
 
   handleRemoveDialogOpen = (event, row) => {
@@ -80,8 +85,13 @@ class TraineeList extends React.Component {
   }
 
   handleRemoveDialogSubmit = (row) => {
+    const { openSnackBar } = this.context;
     console.log('Data Removed');
-    console.log(row);
+    if (new Date(row.createdAt) < new Date('2019-02-14')) {
+      openSnackBar('This is a success message', 'success');
+    } else {
+      openSnackBar('This is an error message', 'error');
+    }
   }
 
   render() {
@@ -173,5 +183,7 @@ class TraineeList extends React.Component {
 TraineeList.propTypes = {
   traineeList: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
+
+TraineeList.contextType = SharedSnackBarContextConsumer;
 
 export default TraineeList;

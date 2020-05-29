@@ -1,8 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { ThemeProvider, CssBaseline } from '@material-ui/core/';
+
 import { defaultTheme } from './theme';
 import { AuthLayoutRoute, PrivateLayoutRoute } from './routes';
+import { SnackBarProvider } from './contexts';
 import {
   Login,
   Trainee,
@@ -16,16 +18,18 @@ function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <Router>
-        <Switch>
-          <AuthLayoutRoute path="/login" component={Login} />
-          <PrivateLayoutRoute path="/trainee" component={Trainee} />
-          <PrivateLayoutRoute path="/children" component={ChildrenDemo} />
-          <PrivateLayoutRoute path="/input-demo" component={InputDemo} />
-          <PrivateLayoutRoute path="/text-field-demo" component={TextFieldDemo} />
-          <PrivateLayoutRoute component={NoMatch} />
-        </Switch>
-      </Router>
+      <SnackBarProvider>
+        <Router>
+          <Switch>
+            <AuthLayoutRoute path="/login" component={Login} />
+            <PrivateLayoutRoute path="/trainee" component={Trainee} />
+            <PrivateLayoutRoute path="/children" component={ChildrenDemo} />
+            <PrivateLayoutRoute path="/input-demo" component={InputDemo} />
+            <PrivateLayoutRoute path="/text-field-demo" component={TextFieldDemo} />
+            <PrivateLayoutRoute component={NoMatch} />
+          </Switch>
+        </Router>
+      </SnackBarProvider>
     </ThemeProvider>
   );
 }
