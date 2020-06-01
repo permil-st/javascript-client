@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core';
 
 import useStyles from './styles';
+import { deleteUser } from '../../../lib';
 
 const navigateTo = (route, history) => {
   history.push(route);
@@ -27,7 +28,8 @@ const Navbar = () => {
       return navigateTo('/input-demo', history);
     case 'CHILDREN DEMO':
       return navigateTo('/children', history);
-    case 'LOGIN':
+    case 'LOGOUT':
+      deleteUser();
       return navigateTo('/login', history);
     default:
       return navigateTo('/', history);
@@ -46,7 +48,7 @@ const Navbar = () => {
             <Button color="inherit" onClick={handleClick}>TEXTFIELD DEMO</Button>
             <Button color="inherit" onClick={handleClick}>INPUT DEMO</Button>
             <Button color="inherit" onClick={handleClick}>CHILDREN DEMO</Button>
-            <Button color="inherit" onClick={handleClick}>Login</Button>
+            <Button color="inherit" onClick={handleClick}>Logout</Button>
           </div>
         </Toolbar>
       </AppBar>
