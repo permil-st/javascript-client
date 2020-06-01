@@ -12,6 +12,7 @@ const TraineeListField = (props) => {
     <List>
       { (traineeList && traineeList.map((key) => (
         <ListItem
+          key={key.id}
           button
           component="button"
           onClick={() => {

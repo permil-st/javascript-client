@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes, { object } from 'prop-types';
+import PropTypes from 'prop-types';
 import { Card, CardContent } from '@material-ui/core';
 
 import useStyles from './styles';
@@ -18,7 +18,7 @@ const FixedWidthCard = (props) => {
 };
 
 FixedWidthCard.propTypes = {
-  children: PropTypes.instanceOf(object),
+  children: PropTypes.objectOf(PropTypes.any),
 };
 
 FixedWidthCard.defaultProps = {
