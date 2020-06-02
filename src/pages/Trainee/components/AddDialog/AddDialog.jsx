@@ -2,7 +2,7 @@ import React from 'react';
 import * as yup from 'yup';
 import propTypes from 'prop-types';
 import {
-  Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid,
+  Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, CircularProgress,
 } from '@material-ui/core';
 import {
   Person, Email,
@@ -156,7 +156,9 @@ class AddDialog extends React.Component {
   }
 
   render() {
-    const { open, onClose, onSubmit } = this.props;
+    const {
+      open, onClose, onSubmit, loading,
+    } = this.props;
     const { handleBlur, getError, handleChange } = this;
 
     const {
@@ -233,15 +235,15 @@ class AddDialog extends React.Component {
             Cancel
           </Button>
           <Button
-            disabled={(!this.isTouched()) || this.hasErrors()}
+            disabled={loading || ((!this.isTouched()) || this.hasErrors())}
             onClick={() => {
               onSubmit({ name: name.value, email: email.value, password: password.value });
-              onClose();
             }}
             color="primary"
           >
             Submit
           </Button>
+          {loading && (<CircularProgress />)}
         </DialogActions>
       </Dialog>
     );
@@ -252,6 +254,11 @@ AddDialog.propTypes = {
   open: propTypes.bool.isRequired,
   onClose: propTypes.func.isRequired,
   onSubmit: propTypes.func.isRequired,
+  loading: propTypes.bool,
 };
+
+AddDialog.defaultProps = {
+  loading: false,
+}
 
 export default AddDialog;
