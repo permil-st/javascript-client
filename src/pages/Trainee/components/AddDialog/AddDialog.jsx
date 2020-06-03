@@ -2,7 +2,8 @@ import React from 'react';
 import * as yup from 'yup';
 import propTypes from 'prop-types';
 import {
-  Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, CircularProgress,
+  Button, Dialog, DialogActions, DialogContent,
+  DialogContentText, DialogTitle, Grid, CircularProgress,
 } from '@material-ui/core';
 import {
   Person, Email,
@@ -259,6 +260,6 @@ AddDialog.propTypes = {
 
 AddDialog.defaultProps = {
   loading: false,
-}
+};
 
 export default AddDialog;

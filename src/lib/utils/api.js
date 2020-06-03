@@ -16,7 +16,7 @@ const callApi = async (url, method, headers, data) => {
       response = await Axios.put(`${BASE_URL}${url}`, data, { headers });
       break;
     case 'DELETE':
-      response = await Axios.delete(`${BASE_URL}${url}`, data, { headers });
+      response = await Axios.delete(`${BASE_URL}${url}`, { headers });
       break;
     default:
       response = null;

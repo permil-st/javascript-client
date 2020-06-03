@@ -1,12 +1,13 @@
 import React from 'react';
 import propTypes from 'prop-types';
 import {
-  Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+  Button, Dialog, DialogActions, DialogContent, DialogContentText,
+  DialogTitle, CircularProgress,
 } from '@material-ui/core';
 
 const DeleteDialog = (props) => {
   const {
-    open, onClose, onSubmit, row,
+    open, onClose, onSubmit, row, loading,
   } = props;
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
@@ -21,14 +22,15 @@ const DeleteDialog = (props) => {
           Cancel
         </Button>
         <Button
+          disabled={loading}
           onClick={() => {
             onSubmit(row);
-            onClose();
           }}
           color="primary"
         >
           Submit
         </Button>
+        { loading && (<CircularProgress />)}
       </DialogActions>
     </Dialog>
   );
@@ -37,8 +39,13 @@ const DeleteDialog = (props) => {
 DeleteDialog.propTypes = {
   open: propTypes.bool.isRequired,
   onClose: propTypes.func.isRequired,
+  loading: propTypes.bool,
   onSubmit: propTypes.func.isRequired,
   row: propTypes.objectOf(propTypes.object).isRequired,
+};
+
+DeleteDialog.defaultProps = {
+  loading: false,
 };
 
 export default DeleteDialog;

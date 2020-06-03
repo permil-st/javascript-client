@@ -2,7 +2,8 @@ import React from 'react';
 import * as yup from 'yup';
 import propTypes from 'prop-types';
 import {
-  Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+  Button, Dialog, DialogActions, DialogContent,
+  DialogContentText, DialogTitle, CircularProgress,
 } from '@material-ui/core';
 import {
   Person, Email,
@@ -139,7 +140,7 @@ class EditDialog extends React.Component {
 
   render() {
     const {
-      open, onClose, onSubmit, row,
+      open, onClose, onSubmit, row, loading,
     } = this.props;
     const { handleBlur, getError, handleChange } = this;
     const { [NAME]: name, [EMAIL]: email } = this.state;
@@ -185,14 +186,15 @@ class EditDialog extends React.Component {
             Cancel
           </Button>
           <Button
+            disabled={loading || ((!this.isTouched()) || this.hasErrors())}
             onClick={() => {
               onSubmit({ name: name.value, email: email.value }, row);
-              onClose();
             }}
             color="primary"
           >
             Submit
           </Button>
+          {loading && (<CircularProgress />)}
         </DialogActions>
       </Dialog>
     );
@@ -203,7 +205,13 @@ EditDialog.propTypes = {
   open: propTypes.bool.isRequired,
   onClose: propTypes.func.isRequired,
   onSubmit: propTypes.func.isRequired,
+  loading: propTypes.bool,
   row: propTypes.objectOf(propTypes.object).isRequired,
+};
+
+
+EditDialog.defaultProps = {
+  loading: false,
 };
 
 export default EditDialog;
