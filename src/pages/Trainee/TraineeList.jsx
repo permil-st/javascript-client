@@ -73,9 +73,9 @@ class TraineeList extends React.Component {
     const { openSnackBar } = this.context;
     console.log('Data Modified');
     if (new Date(row.createdAt) < new Date('2019-02-14')) {
-      openSnackBar('This is a success message', 'error');
+      openSnackBar('This is an error message', 'error');
     } else {
-      openSnackBar('This is an error message', 'success');
+      openSnackBar('This is a success message', 'success');
     }
   }
 
@@ -90,10 +90,10 @@ class TraineeList extends React.Component {
   handleRemoveDialogSubmit = (row) => {
     const { openSnackBar } = this.context;
     console.log('Data Removed');
-    if (new Date(row.createdAt) < new Date('2019-02-14')) {
-      openSnackBar('This is a success message', 'error');
+    if (new Date(row.createdAt) <= new Date('2019-02-14')) {
+      openSnackBar('This is an error message', 'error');
     } else {
-      openSnackBar('This is an error message', 'success');
+      openSnackBar('This is a success message', 'success');
     }
   }
 
