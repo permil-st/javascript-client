@@ -38,11 +38,14 @@ class TraineeList extends React.Component {
   };
 
   handleDialogSubmit = (data) => {
+    const { openSnackBar } = this.context;
     const { dialog } = this.state;
 
     this.setState({ dialog: data }, () => {
       console.log(dialog);
     });
+
+    openSnackBar('Trainee is added successfully', 'success');
   };
 
   handleSelect = () => {
@@ -70,9 +73,9 @@ class TraineeList extends React.Component {
     const { openSnackBar } = this.context;
     console.log('Data Modified');
     if (new Date(row.createdAt) < new Date('2019-02-14')) {
-      openSnackBar('This is a success message', 'success');
+      openSnackBar('This is a success message', 'error');
     } else {
-      openSnackBar('This is an error message', 'error');
+      openSnackBar('This is an error message', 'success');
     }
   }
 
@@ -88,9 +91,9 @@ class TraineeList extends React.Component {
     const { openSnackBar } = this.context;
     console.log('Data Removed');
     if (new Date(row.createdAt) < new Date('2019-02-14')) {
-      openSnackBar('This is a success message', 'success');
+      openSnackBar('This is a success message', 'error');
     } else {
-      openSnackBar('This is an error message', 'error');
+      openSnackBar('This is an error message', 'success');
     }
   }
 
