@@ -1,5 +1,6 @@
 import React from 'react';
 import { ThemeProvider, Typography } from '@material-ui/core/';
+
 import { Math } from '../../components';
 import { customTheme } from '../../theme';
 

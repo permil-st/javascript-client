@@ -1,13 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import { Navbar } from '../components';
 
-const useStyles = makeStyles(() => ({
-  container: {
-    padding: '12px',
-  },
-}));
+import { Navbar } from '../components';
+import useStyles from './styles';
 
 const PrivateLayout = ({ children }) => {
   const classes = useStyles();
