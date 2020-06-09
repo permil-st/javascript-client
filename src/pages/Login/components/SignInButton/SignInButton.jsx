@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, LinearProgress } from '@material-ui/core';
+import { Button, CircularProgress } from '@material-ui/core';
 
 import useStyles from './styles';
 
@@ -18,8 +18,8 @@ const SignInButton = (props) => {
         disabled={disabled}
       >
         Sign In
+        {isLoading && (<CircularProgress />)}
       </Button>
-      {isLoading && (<LinearProgress />)}
     </>
   );
 };

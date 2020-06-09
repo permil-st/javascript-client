@@ -104,8 +104,9 @@ class Login extends React.Component {
   }
 
   setLoginSuccess = (token) => {
+    const { history } = this.props;
     saveUser(token);
-    this.props.history.push('/trainee');
+    history.push('/trainee');
   }
 
   handleSubmitClick = () => {
