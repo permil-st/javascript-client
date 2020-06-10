@@ -5,6 +5,8 @@ import { Email } from '@material-ui/icons';
 
 import { FixedWidthCard, PinkLockAvatar, SignInButton } from './components';
 import { PasswordField, TextFieldWithIcon } from '../components';
+import { callApi, saveUser } from '../../lib';
+import { SharedSnackBarContextConsumer } from '../../contexts';
 
 const PASSWORD = 'password';
 const EMAIL = 'email';
@@ -16,6 +18,7 @@ class Login extends React.Component {
     this.state = {
       [EMAIL]: this.getIntialState,
       [PASSWORD]: this.getIntialState,
+      isLoading: false,
     };
   }
 
@@ -100,14 +103,29 @@ class Login extends React.Component {
     }
   }
 
+  setLoginSuccess = (token) => {
+    const { history } = this.props;
+    saveUser(token);
+    history.push('/trainee');
+  }
+
   handleSubmitClick = () => {
-    //
+    const { [EMAIL]: { value: email }, [PASSWORD]: { value: password } } = this.state;
+    this.setState({ isLoading: true });
+    const data = callApi('user/login', 'POST', undefined, { email, password });
+    data.then((token) => this.setLoginSuccess(token.data))
+      .catch((err) => {
+        const { openSnackBar } = this.context;
+        openSnackBar(err?.response?.data?.message || err.message, 'error');
+        this.setState({ isLoading: false });
+      });
   };
 
   render() {
     const {
       [EMAIL]: email,
       [PASSWORD]: password,
+      isLoading,
     } = this.state;
     const { getError, handleBlur, handleChange } = this;
 
@@ -146,13 +164,16 @@ class Login extends React.Component {
             />
           </form>
           <SignInButton
+            isLoading={isLoading}
             onClick={this.handleSubmitClick}
-            disabled={(!this.isTouched()) || this.hasErrors()}
+            disabled={(isLoading) || (!this.isTouched()) || this.hasErrors()}
           />
         </>
       </FixedWidthCard>
     );
   }
 }
+
+Login.contextType = SharedSnackBarContextConsumer;
 
 export default Login;
