@@ -104,8 +104,9 @@ class Login extends React.Component {
   }
 
   setLoginSuccess = (token) => {
+    const { history } = this.props;
     saveUser(token);
-    this.props.history.push('/trainee');
+    history.push('/trainee');
   }
 
   handleSubmitClick = () => {
@@ -115,7 +116,7 @@ class Login extends React.Component {
     data.then((token) => this.setLoginSuccess(token.data))
       .catch((err) => {
         const { openSnackBar } = this.context;
-        openSnackBar(err.toString(), 'error');
+        openSnackBar(err?.response?.data?.message || err.message, 'error');
         this.setState({ isLoading: false });
       });
   };

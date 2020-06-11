@@ -22,7 +22,6 @@ class TraineeList extends React.Component {
       isOpenDeleteDialog: false,
       deleteRow: {},
       editRow: {},
-      dialog: {},
       orderBy: '',
       order: '',
       count: 100,
@@ -64,12 +63,10 @@ class TraineeList extends React.Component {
   };
 
   handleDialogSubmit = (data) => {
-    const { dialog } = this.state;
     const { openSnackBar } = this.context;
 
     this.setState({ loading: true });
 
-    this.setState({ dialog: data });
     callApi('trainee', 'POST', { Authorization: getUserToken() }, data)
       .then((response) => {
         openSnackBar(response.message, 'success');
@@ -81,6 +78,8 @@ class TraineeList extends React.Component {
         this.setState({ loading: false });
         this.handleDialogClose();
       });
+
+    openSnackBar('Trainee is added successfully', 'success');
   };
 
   handleSelect = () => {
@@ -110,9 +109,9 @@ class TraineeList extends React.Component {
     const { openSnackBar } = this.context;
     console.log('Data Modified');
     if (new Date(row.createdAt) < new Date('2019-02-14')) {
-      openSnackBar('This is a success message', 'success');
-    } else {
       openSnackBar('This is an error message', 'error');
+    } else {
+      openSnackBar('This is a success message', 'success');
     }
   }
 
@@ -127,10 +126,10 @@ class TraineeList extends React.Component {
   handleRemoveDialogSubmit = (row) => {
     const { openSnackBar } = this.context;
     console.log('Data Removed');
-    if (new Date(row.createdAt) < new Date('2019-02-14')) {
-      openSnackBar('This is a success message', 'success');
-    } else {
+    if (new Date(row.createdAt) <= new Date('2019-02-14')) {
       openSnackBar('This is an error message', 'error');
+    } else {
+      openSnackBar('This is a success message', 'success');
     }
   }
 
