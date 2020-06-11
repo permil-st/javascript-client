@@ -38,19 +38,23 @@ class TraineeList extends React.Component {
     const { openSnackBar } = this.context;
     const { rowsPerPage } = this.state;
     try {
-      const response = await callApi(`trainee?skip=${skip}&limit=${rowsPerPage}`, 'GET', { 'Content-Type': 'application/json', Authorization: getUserToken() });
+      const response = await callApi(
+        `trainee?skip=${skip}&limit=${rowsPerPage}`,
+        'GET', { 'Content-Type': 'application/json', Authorization: getUserToken() }
+      );
       this.setState({
         loading: false,
         count: response.data.count,
         records: [...response.data.records],
       });
     } catch (err) {
+      console.log(err)
       this.setState({
         loading: false,
         count: 0,
         records: [],
       });
-      openSnackBar(err.data.message, 'error');
+      openSnackBar(err?.data?.message || err.message, 'error');
     }
   }
 
@@ -62,24 +66,22 @@ class TraineeList extends React.Component {
     this.setState({ isOpenAddDialog: false });
   };
 
-  handleDialogSubmit = (data) => {
+  handleDialogSubmit = async (data) => {
     const { openSnackBar } = this.context;
 
-    this.setState({ loading: true });
-
-    callApi('trainee', 'POST', { Authorization: getUserToken() }, data)
-      .then((response) => {
-        openSnackBar(response.message, 'success');
-        this.setState({ loading: false });
-        this.handleDialogClose();
-      })
-      .catch((err) => {
-        openSnackBar(err.data.message, 'error');
-        this.setState({ loading: false });
-        this.handleDialogClose();
-      });
-
-    openSnackBar('Trainee is added successfully', 'success');
+    try {
+      this.setState({ loading: true });
+      const response = await callApi(
+        'trainee', 'POST', { Authorization: getUserToken() }, data,
+      );
+      openSnackBar(response.message, 'success');
+      this.setState({ loading: false });
+      this.handleDialogClose();
+    } catch (err) {
+      openSnackBar(err?.response?.data?.message || err.message, 'error');
+      this.setState({ loading: false });
+      this.handleDialogClose();
+    }
   };
 
   handleSelect = () => {
