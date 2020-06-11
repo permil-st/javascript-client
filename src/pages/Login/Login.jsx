@@ -104,20 +104,23 @@ class Login extends React.Component {
   }
 
   setLoginSuccess = (token) => {
+    const { history } = this.props;
     saveUser(token);
-    this.props.history.push('/trainee');
+    history.push('/trainee');
   }
 
-  handleSubmitClick = () => {
+  handleSubmitClick = async () => {
     const { [EMAIL]: { value: email }, [PASSWORD]: { value: password } } = this.state;
     this.setState({ isLoading: true });
-    const data = callApi('user/login', 'POST', undefined, { email, password });
-    data.then((token) => this.setLoginSuccess(token.data))
-      .catch((err) => {
-        const { openSnackBar } = this.context;
-        openSnackBar(err.toString(), 'error');
-        this.setState({ isLoading: false });
-      });
+
+    try {
+      const token = await callApi('user/login', 'POST', undefined, { email, password });
+      this.setLoginSuccess(token.data);
+    } catch (err) {
+      const { openSnackBar } = this.context;
+      openSnackBar(err?.data?.message || err.message, 'error');
+      this.setState({ isLoading: false });
+    }
   };
 
   render() {
@@ -164,7 +167,7 @@ class Login extends React.Component {
           </form>
           <SignInButton
             isLoading={isLoading}
-            onClick={this.handleSubmitClick}
+            onClick={() => { this.handleSubmitClick(); }}
             disabled={(isLoading) || (!this.isTouched()) || this.hasErrors()}
           />
         </>

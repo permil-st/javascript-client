@@ -1,29 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import { useRouteMatch, useParams, useHistory } from 'react-router-dom';
 import {
   CardContent, Card, CardMedia, Typography, Button, Grid,
 } from '@material-ui/core';
 
-import { getDateFormatted } from '../../lib';
-import { NoFound } from './components';
-
-const useStyles = makeStyles({
-  root: {
-    display: 'flex',
-  },
-  cover: {
-    width: '150px',
-  },
-  button: {
-    margin: '16px',
-  },
-});
+import { getDateFormatted } from '../../../lib';
+import { NoFound } from '../components';
+import useStyles from './styles';
 
 const TraineeDetail = (props) => {
-  const { traineeId } = useParams();
   const { traineeList } = props;
+
+  const { traineeId } = useParams();
   const classes = useStyles();
   const { path } = useRouteMatch();
   const history = useHistory();

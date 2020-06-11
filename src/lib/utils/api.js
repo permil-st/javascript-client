@@ -22,7 +22,7 @@ const callApi = async (url, method, headers, data) => {
       response = null;
     }
   } catch (err) {
-    throw err.response;
+    throw err?.response || err;
   }
   return response.data;
 };
