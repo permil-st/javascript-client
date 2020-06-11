@@ -46,7 +46,7 @@ class TraineeList extends React.Component {
     try {
       const response = await callApi(
         `trainee?skip=${skip}&limit=${rowsPerPage}`,
-        'GET', { 'Content-Type': 'application/json', Authorization: getUserToken() }
+        'GET', { 'Content-Type': 'application/json', Authorization: getUserToken() },
       );
       this.setState({
         loading: false,
@@ -54,7 +54,6 @@ class TraineeList extends React.Component {
         records: [...response.data.records],
       });
     } catch (err) {
-      console.log(err)
       this.setState({
         loading: false,
         count: 0,
@@ -80,6 +79,7 @@ class TraineeList extends React.Component {
       const response = await callApi(
         'trainee', 'POST', { Authorization: getUserToken() }, data,
       );
+
       openSnackBar(response.message, 'success');
       this.setState({ loading: false });
       this.handleDialogClose();
@@ -113,24 +113,24 @@ class TraineeList extends React.Component {
     this.setState({ isOpenEditDialog: false });
   }
 
-  handleEditDialogSubmit = (data, row) => {
+  handleEditDialogSubmit = async (data, row) => {
     const { openSnackBar } = this.context;
     const { page, rowsPerPage } = this.state;
 
-    console.log('Data Modified');
-    this.setState({ dialogLoading: true });
+    try {
+      this.setState({ dialogLoading: true });
+      const response = await callApi(
+        'trainee', 'PUT', { Authorization: getUserToken() }, { ...data, id: row.originalId },
+      );
 
-    callApi(`trainee`, 'PUT', { Authorization: getUserToken() }, {...data, id: row.originalId})
-      .then((response) => {
-        openSnackBar(response.message, 'success');
-        this.loadTrainees(page * rowsPerPage);
-        this.setState({ dialogLoading: false });
-        this.handleEditDialogClose();
-      })
-      .catch((err) => {
-        openSnackBar(err.data.message, 'error');
-        this.setState({ dialogLoading: false });
-      });
+      openSnackBar(response.message, 'success');
+      this.loadTrainees(page * rowsPerPage);
+      this.setState({ dialogLoading: false });
+      this.handleEditDialogClose();
+    } catch (err) {
+      openSnackBar(err?.data?.message || err.message, 'error');
+      this.setState({ dialogLoading: false });
+    }
   }
 
   handleRemoveDialogOpen = (event, row) => {
@@ -141,30 +141,32 @@ class TraineeList extends React.Component {
     this.setState({ isOpenDeleteDialog: false });
   }
 
-  handleRemoveDialogSubmit = (row) => {
+  handleRemoveDialogSubmit = async (row) => {
     const { openSnackBar } = this.context;
     const { page, rowsPerPage, records } = this.state;
     let skip = 0;
-    console.log('Data Removed');
-    this.setState({ dialogLoading: true });
 
-    callApi(`trainee/${row.originalId}`, 'DELETE', { Authorization: getUserToken() })
-      .then((response) => {
-        openSnackBar(response.message, 'success');
-        if (records.length > 1) {
-          skip = (page * rowsPerPage);
-        } else {
-          skip = ((page - 1) * rowsPerPage);
-          this.setState({ page: (page - 1) });
-        }
-        this.setState({ dialogLoading: false });
-        this.handleRemoveDialogClose();
-        this.loadTrainees(skip);
-      })
-      .catch((err) => {
-        openSnackBar(err.data.message, 'error');
-        this.setState({ dialogLoading: false });
-      });
+    try {
+      this.setState({ dialogLoading: true });
+      const response = await callApi(
+        `trainee/${row.originalId}`, 'DELETE', { Authorization: getUserToken() },
+      );
+
+      openSnackBar(response.message, 'success');
+      if (records.length > 1) {
+        skip = (page * rowsPerPage);
+      } else {
+        skip = ((page - 1) * rowsPerPage);
+        this.setState({ page: (page - 1) });
+      }
+
+      this.setState({ dialogLoading: false });
+      this.handleRemoveDialogClose();
+      this.loadTrainees(skip);
+    } catch (err) {
+      openSnackBar(err?.data?.message || err.message, 'error');
+      this.setState({ dialogLoading: false });
+    }
   }
 
   render() {
@@ -236,21 +238,21 @@ class TraineeList extends React.Component {
           open={isOpenAddDialog}
           loading={dialogLoading}
           onClose={handleDialogClose}
-          onSubmit={handleDialogSubmit}
+          onSubmit={() => { handleDialogSubmit(); }}
         />
         <DeleteDialog
           open={isOpenDeleteDialog}
           row={deleteRow}
           loading={dialogLoading}
           onClose={handleRemoveDialogClose}
-          onSubmit={handleRemoveDialogSubmit}
+          onSubmit={() => { handleRemoveDialogSubmit(); }}
         />
         <EditDialog
           open={isOpenEditDialog}
           row={editRow}
           loading={dialogLoading}
           onClose={handleEditDialogClose}
-          onSubmit={handleEditDialogSubmit}
+          onSubmit={() => { handleEditDialogSubmit(); }}
         />
         <TraineeListField traineeList={staticTraineeList} />
       </>
