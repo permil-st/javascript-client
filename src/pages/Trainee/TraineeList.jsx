@@ -238,21 +238,21 @@ class TraineeList extends React.Component {
           open={isOpenAddDialog}
           loading={dialogLoading}
           onClose={handleDialogClose}
-          onSubmit={() => { handleDialogSubmit(); }}
+          onSubmit={(data) => { handleDialogSubmit(data); }}
         />
         <DeleteDialog
           open={isOpenDeleteDialog}
           row={deleteRow}
           loading={dialogLoading}
           onClose={handleRemoveDialogClose}
-          onSubmit={() => { handleRemoveDialogSubmit(); }}
+          onSubmit={(row) => { handleRemoveDialogSubmit(row); }}
         />
         <EditDialog
           open={isOpenEditDialog}
           row={editRow}
           loading={dialogLoading}
           onClose={handleEditDialogClose}
-          onSubmit={() => { handleEditDialogSubmit(); }}
+          onSubmit={(data, row) => { handleEditDialogSubmit(data, row); }}
         />
         <TraineeListField traineeList={staticTraineeList} />
       </>
