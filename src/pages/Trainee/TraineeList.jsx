@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Grid } from '@material-ui/core';
 import { Edit, Delete } from '@material-ui/icons';
+import { graphql } from '@apollo/react-hoc';
+import { FETCH_TRAINEE } from './query';
 
 import {
   AddDialog, DeleteDialog, EditDialog, Table,
@@ -29,10 +31,6 @@ class TraineeList extends React.Component {
       page: 0,
       rowsPerPage: 20,
     };
-  }
-
-  componentDidMount() {
-    this.loadTrainees(0);
   }
 
   loadTrainees = async (skip) => {
@@ -101,8 +99,11 @@ class TraineeList extends React.Component {
 
   handlePageChange = (event, page) => {
     const { rowsPerPage } = this.state;
+    const { data: { refetch } } = this.props;
     this.setState({ page });
-    this.loadTrainees((page) * rowsPerPage);
+
+    refetch({ skip: (page) * rowsPerPage, limit: rowsPerPage });
+    // this.loadTrainees((page) * rowsPerPage);
   }
 
   handleEditDialogOpen = (event, row) => {
@@ -171,10 +172,12 @@ class TraineeList extends React.Component {
 
   render() {
     const {
-      isOpenAddDialog, isOpenEditDialog, isOpenDeleteDialog, loading, dialogLoading,
-      orderBy, order, count, page, rowsPerPage, deleteRow, editRow, records,
+      isOpenAddDialog, isOpenEditDialog, isOpenDeleteDialog, dialogLoading,
+      orderBy, order, page, rowsPerPage, deleteRow, editRow,
     } = this.state;
-    const { traineeList: staticTraineeList } = this.props;
+    const { openSnackBar } = this.context;
+    const { traineeList: staticTraineeList, data: { error = {}, loading, getAllTrainees = {} } } = this.props;
+    const { records = [], count = 0 } = getAllTrainees;
     const {
       handleSelect, handleSort, handlePageChange,
       handleEditDialogOpen, handleEditDialogClose, handleEditDialogSubmit,
@@ -210,6 +213,10 @@ class TraineeList extends React.Component {
         handler: handleRemoveDialogOpen,
       },
     ];
+
+    if (error.message) {
+      openSnackBar(error.message, 'error');
+    }
 
     return (
       <>
@@ -262,8 +269,17 @@ class TraineeList extends React.Component {
 
 TraineeList.propTypes = {
   traineeList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  data: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 TraineeList.contextType = SharedSnackBarContextConsumer;
 
-export default TraineeList;
+export default graphql(
+  FETCH_TRAINEE, {
+    options: {
+      variables: {
+        skip: 0, limit: 5,
+      },
+    },
+  },
+)(TraineeList);
