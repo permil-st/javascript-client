@@ -7,6 +7,7 @@ import {
 import HeaderRow from './HeaderRow';
 import BodyRow from './BodyRow';
 import useStyles from './styles';
+import { withLoaderAndMessage } from '../../../../components';
 
 const GenericTable = (props) => {
   const {
@@ -91,4 +92,4 @@ GenericTable.defaultProps = {
   onChangePage: () => {},
 };
 
-export default GenericTable;
+export default withLoaderAndMessage(GenericTable);

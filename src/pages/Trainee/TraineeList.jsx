@@ -7,7 +7,7 @@ import {
   AddDialog, DeleteDialog, EditDialog, Table,
 } from './components';
 import TraineeListField from './TraineeListField';
-import { getDateFormatted } from '../../lib';
+import { getDateFormatted, callApi, getUserToken } from '../../lib';
 import { SharedSnackBarContextConsumer } from '../../contexts';
 
 class TraineeList extends React.Component {
@@ -15,18 +15,47 @@ class TraineeList extends React.Component {
     super(props);
 
     this.state = {
+      records: [],
+      loading: true,
       isOpenAddDialog: false,
       isOpenEditDialog: false,
       isOpenDeleteDialog: false,
       deleteRow: {},
       editRow: {},
-      dialog: {},
       orderBy: '',
       order: '',
       count: 100,
       page: 0,
-      rowsPerPage: 10,
+      rowsPerPage: 20,
     };
+  }
+
+  componentDidMount() {
+    this.loadTrainees(0);
+  }
+
+  loadTrainees = async (skip) => {
+    const { openSnackBar } = this.context;
+    const { rowsPerPage } = this.state;
+    try {
+      const response = await callApi(
+        `trainee?skip=${skip}&limit=${rowsPerPage}`,
+        'GET', { 'Content-Type': 'application/json', Authorization: getUserToken() }
+      );
+      this.setState({
+        loading: false,
+        count: response.data.count,
+        records: [...response.data.records],
+      });
+    } catch (err) {
+      console.log(err)
+      this.setState({
+        loading: false,
+        count: 0,
+        records: [],
+      });
+      openSnackBar(err?.data?.message || err.message, 'error');
+    }
   }
 
   handleButtonClick = () => {
@@ -37,15 +66,22 @@ class TraineeList extends React.Component {
     this.setState({ isOpenAddDialog: false });
   };
 
-  handleDialogSubmit = (data) => {
+  handleDialogSubmit = async (data) => {
     const { openSnackBar } = this.context;
-    const { dialog } = this.state;
 
-    this.setState({ dialog: data }, () => {
-      console.log(dialog);
-    });
-
-    openSnackBar('Trainee is added successfully', 'success');
+    try {
+      this.setState({ loading: true });
+      const response = await callApi(
+        'trainee', 'POST', { Authorization: getUserToken() }, data,
+      );
+      openSnackBar(response.message, 'success');
+      this.setState({ loading: false });
+      this.handleDialogClose();
+    } catch (err) {
+      openSnackBar(err?.response?.data?.message || err.message, 'error');
+      this.setState({ loading: false });
+      this.handleDialogClose();
+    }
   };
 
   handleSelect = () => {
@@ -58,7 +94,9 @@ class TraineeList extends React.Component {
   }
 
   handlePageChange = (event, page) => {
+    const { rowsPerPage } = this.state;
     this.setState({ page });
+    this.loadTrainees((page) * rowsPerPage);
   }
 
   handleEditDialogOpen = (event, row) => {
@@ -99,10 +137,10 @@ class TraineeList extends React.Component {
 
   render() {
     const {
-      isOpenAddDialog, isOpenEditDialog, isOpenDeleteDialog,
-      orderBy, order, count, page, rowsPerPage, deleteRow, editRow,
+      isOpenAddDialog, isOpenEditDialog, isOpenDeleteDialog, loading,
+      orderBy, order, count, page, rowsPerPage, deleteRow, editRow, records,
     } = this.state;
-    const { traineeList } = this.props;
+    const { traineeList: staticTraineeList } = this.props;
     const {
       handleSelect, handleSort, handlePageChange,
       handleEditDialogOpen, handleEditDialogClose, handleEditDialogSubmit,
@@ -148,8 +186,10 @@ class TraineeList extends React.Component {
         </Grid>
         <Table
           id="trainee"
+          loader={loading}
+          dataLength={records.length}
           columns={columns}
-          data={traineeList}
+          data={records}
           orderBy={orderBy}
           order={order}
           actions={actions}
@@ -162,6 +202,7 @@ class TraineeList extends React.Component {
         />
         <AddDialog
           open={isOpenAddDialog}
+          loading={loading}
           onClose={handleDialogClose}
           onSubmit={handleDialogSubmit}
         />
@@ -177,7 +218,7 @@ class TraineeList extends React.Component {
           onClose={handleEditDialogClose}
           onSubmit={handleEditDialogSubmit}
         />
-        <TraineeListField traineeList={traineeList} />
+        <TraineeListField traineeList={staticTraineeList} />
       </>
     );
   }
