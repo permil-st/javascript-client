@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import * as yup from 'yup';
 import { Typography, Grid } from '@material-ui/core';
 import { Email } from '@material-ui/icons';
@@ -111,14 +112,16 @@ class Login extends React.Component {
 
   handleSubmitClick = async () => {
     const { [EMAIL]: { value: email }, [PASSWORD]: { value: password } } = this.state;
+    const { loginUser } = this.props;
     this.setState({ isLoading: true });
 
     try {
-      const token = await callApi('user/login', 'POST', undefined, { email, password });
-      this.setLoginSuccess(token.data);
+      const token = await loginUser({ variables: { email, password } });
+      // const token = await callApi('user/login', 'POST', undefined, { email, password });
+      this.setLoginSuccess(token.data.loginUser);
     } catch (err) {
       const { openSnackBar } = this.context;
-      openSnackBar(err?.data?.message || err.message, 'error');
+      openSnackBar(err.message, 'error');
       this.setState({ isLoading: false });
     }
   };
@@ -177,5 +180,9 @@ class Login extends React.Component {
 }
 
 Login.contextType = SharedSnackBarContextConsumer;
+
+Login.propTypes = {
+  loginUser: PropTypes.objectOf(PropTypes.any).isRequired,
+};
 
 export default Login;

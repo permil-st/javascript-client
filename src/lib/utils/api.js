@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-const BASE_URL = 'https://express-training.herokuapp.com/api/';
+import { BASE_URL } from '../../configs/constants';
 
 const callApi = async (url, method, headers, data) => {
   let response = null;
