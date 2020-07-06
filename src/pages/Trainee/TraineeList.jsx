@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { Button, Grid } from '@material-ui/core';
 import { Edit, Delete } from '@material-ui/icons';
 import { graphql } from '@apollo/react-hoc';
-import { FETCH_TRAINEE } from './query';
+import { Mutation } from '@apollo/react-components';
 
+import { FETCH_TRAINEE } from './query';
+import { ADD_TRAINEE, DELETE_TRAINEE, UPDATE_TRAINEE } from './mutation';
 import {
   AddDialog, DeleteDialog, EditDialog, Table,
 } from './components';
@@ -17,8 +19,6 @@ class TraineeList extends React.Component {
     super(props);
 
     this.state = {
-      records: [],
-      loading: true,
       dialogLoading: false,
       isOpenAddDialog: false,
       isOpenEditDialog: false,
@@ -27,38 +27,9 @@ class TraineeList extends React.Component {
       editRow: {},
       orderBy: '',
       order: '',
-      count: 100,
       page: 0,
       rowsPerPage: 20,
     };
-  }
-
-  loadTrainees = async (skip) => {
-    const { openSnackBar } = this.context;
-    const { rowsPerPage, loading } = this.state;
-
-    if (!loading) {
-      this.setState({ loading: true });
-    }
-
-    try {
-      const response = await callApi(
-        `trainee?skip=${skip}&limit=${rowsPerPage}`,
-        'GET', { 'Content-Type': 'application/json', Authorization: getUserToken() },
-      );
-      this.setState({
-        loading: false,
-        count: response.data.count,
-        records: [...response.data.records],
-      });
-    } catch (err) {
-      this.setState({
-        loading: false,
-        count: 0,
-        records: [],
-      });
-      openSnackBar(err?.data?.message || err.message, 'error');
-    }
   }
 
   handleButtonClick = () => {
@@ -69,21 +40,20 @@ class TraineeList extends React.Component {
     this.setState({ isOpenAddDialog: false });
   };
 
-  handleDialogSubmit = async (data) => {
+  handleDialogSubmit = async (addTrainee, data) => {
     const { openSnackBar } = this.context;
 
     try {
-      this.setState({ loading: true });
-      const response = await callApi(
-        'trainee', 'POST', { Authorization: getUserToken() }, data,
-      );
+      this.setState({ dialogLoading: true });
 
-      openSnackBar(response.message, 'success');
-      this.setState({ loading: false });
+      await addTrainee({ variables: { ...data } });
+
+      openSnackBar('operation successful', 'success');
+      this.setState({ dialogLoading: false });
       this.handleDialogClose();
     } catch (err) {
       openSnackBar(err?.response?.data?.message || err.message, 'error');
-      this.setState({ loading: false });
+      this.setState({ dialogLoading: false });
       this.handleDialogClose();
     }
   };
@@ -100,10 +70,9 @@ class TraineeList extends React.Component {
   handlePageChange = (event, page) => {
     const { rowsPerPage } = this.state;
     const { data: { refetch } } = this.props;
-    this.setState({ page });
 
+    this.setState({ page });
     refetch({ skip: (page) * rowsPerPage, limit: rowsPerPage });
-    // this.loadTrainees((page) * rowsPerPage);
   }
 
   handleEditDialogOpen = (event, row) => {
@@ -114,18 +83,21 @@ class TraineeList extends React.Component {
     this.setState({ isOpenEditDialog: false });
   }
 
-  handleEditDialogSubmit = async (data, row) => {
+  handleEditDialogSubmit = async (updateTrainee, data, row) => {
     const { openSnackBar } = this.context;
-    const { page, rowsPerPage } = this.state;
 
     try {
       this.setState({ dialogLoading: true });
-      const response = await callApi(
-        'trainee', 'PUT', { Authorization: getUserToken() }, { ...data, id: row.originalId },
-      );
 
-      openSnackBar(response.message, 'success');
-      this.loadTrainees(page * rowsPerPage);
+      await updateTrainee({
+        variables: {
+          ...data,
+          id: row.originalId,
+          password: 'Training@123',
+        },
+      });
+
+      openSnackBar('operation successful', 'success');
       this.setState({ dialogLoading: false });
       this.handleEditDialogClose();
     } catch (err) {
@@ -142,28 +114,24 @@ class TraineeList extends React.Component {
     this.setState({ isOpenDeleteDialog: false });
   }
 
-  handleRemoveDialogSubmit = async (row) => {
+  handleRemoveDialogSubmit = async (deleteTrainee, row) => {
     const { openSnackBar } = this.context;
-    const { page, rowsPerPage, records } = this.state;
-    let skip = 0;
+    const { page, rowsPerPage } = this.state;
+    const { data: { getAllTrainees: { records } } } = this.props;
 
     try {
       this.setState({ dialogLoading: true });
-      const response = await callApi(
-        `trainee/${row.originalId}`, 'DELETE', { Authorization: getUserToken() },
-      );
 
-      openSnackBar(response.message, 'success');
-      if (records.length > 1) {
-        skip = (page * rowsPerPage);
-      } else {
-        skip = ((page - 1) * rowsPerPage);
-        this.setState({ page: (page - 1) });
-      }
+      await deleteTrainee({ variables: { id: row.originalId } });
+      openSnackBar('operation successful', 'success');
 
       this.setState({ dialogLoading: false });
+
+      if (records.length === 1) {
+        this.handlePageChange(null, page - 1);
+      }
+
       this.handleRemoveDialogClose();
-      this.loadTrainees(skip);
     } catch (err) {
       openSnackBar(err?.data?.message || err.message, 'error');
       this.setState({ dialogLoading: false });
@@ -176,7 +144,10 @@ class TraineeList extends React.Component {
       orderBy, order, page, rowsPerPage, deleteRow, editRow,
     } = this.state;
     const { openSnackBar } = this.context;
-    const { traineeList: staticTraineeList, data: { error = {}, loading, getAllTrainees = {} } } = this.props;
+    const {
+      traineeList: staticTraineeList,
+      data: { error = {}, loading, getAllTrainees = {} },
+    } = this.props;
     const { records = [], count = 0 } = getAllTrainees;
     const {
       handleSelect, handleSort, handlePageChange,
@@ -218,6 +189,14 @@ class TraineeList extends React.Component {
       openSnackBar(error.message, 'error');
     }
 
+    const variables = { skip: rowsPerPage * page, limit: rowsPerPage };
+
+    // if (count > 0 && (!((page + 1) * rowsPerPage) < count && (page * rowsPerPage) >= count)) {
+    //   this.setState({ page: page - 1 });
+    // }
+
+    console.log(page);
+
     return (
       <>
         <Grid container justify="flex-end">
@@ -225,42 +204,71 @@ class TraineeList extends React.Component {
             ADD TRAINEELIST
           </Button>
         </Grid>
-        <Table
-          id="trainee"
-          loader={loading}
-          dataLength={records.length}
-          columns={columns}
-          data={records}
-          orderBy={orderBy}
-          order={order}
-          actions={actions}
-          onSelect={handleSelect}
-          onSort={handleSort}
-          count={count}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          onChangePage={handlePageChange}
-        />
-        <AddDialog
-          open={isOpenAddDialog}
-          loading={dialogLoading}
-          onClose={handleDialogClose}
-          onSubmit={(data) => { handleDialogSubmit(data); }}
-        />
-        <DeleteDialog
-          open={isOpenDeleteDialog}
-          row={deleteRow}
-          loading={dialogLoading}
-          onClose={handleRemoveDialogClose}
-          onSubmit={(row) => { handleRemoveDialogSubmit(row); }}
-        />
-        <EditDialog
-          open={isOpenEditDialog}
-          row={editRow}
-          loading={dialogLoading}
-          onClose={handleEditDialogClose}
-          onSubmit={(data, row) => { handleEditDialogSubmit(data, row); }}
-        />
+        <Mutation
+          mutation={ADD_TRAINEE}
+          refetchQueries={[{ query: FETCH_TRAINEE, variables }]}
+        >
+          { (addTrainee) => (
+            <Mutation
+              mutation={UPDATE_TRAINEE}
+              refetchQueries={[{ query: FETCH_TRAINEE, variables }]}
+            >
+              {
+                (updateTrainee) => (
+                  <Mutation
+                    mutation={DELETE_TRAINEE}
+                    refetchQueries={[{ query: FETCH_TRAINEE, variables }]}
+                  >
+                    {
+                      (deleteTrainee) => {
+                        return (
+                          <>
+                            <Table
+                              id="trainee"
+                              loader={loading}
+                              dataLength={records.length}
+                              columns={columns}
+                              data={records}
+                              orderBy={orderBy}
+                              order={order}
+                              actions={actions}
+                              onSelect={handleSelect}
+                              onSort={handleSort}
+                              count={count}
+                              page={page}
+                              rowsPerPage={rowsPerPage}
+                              onChangePage={handlePageChange}
+                            />
+                            <AddDialog
+                              open={isOpenAddDialog}
+                              loading={dialogLoading}
+                              onClose={handleDialogClose}
+                              onSubmit={(data) => { handleDialogSubmit(addTrainee, data); }}
+                            />
+                            <DeleteDialog
+                              open={isOpenDeleteDialog}
+                              row={deleteRow}
+                              loading={dialogLoading}
+                              onClose={handleRemoveDialogClose}
+                              onSubmit={(row) => { handleRemoveDialogSubmit(deleteTrainee, row); }}
+                            />
+                            <EditDialog
+                              open={isOpenEditDialog}
+                              row={editRow}
+                              loading={dialogLoading}
+                              onClose={handleEditDialogClose}
+                              onSubmit={(data, row) => { handleEditDialogSubmit(updateTrainee, data, row); }}
+                            />
+                          </>
+                        );
+                      }
+                    }
+                  </Mutation>
+                )
+              }
+            </Mutation>
+          )}
+        </Mutation>
         <TraineeListField traineeList={staticTraineeList} />
       </>
     );
@@ -277,8 +285,9 @@ TraineeList.contextType = SharedSnackBarContextConsumer;
 export default graphql(
   FETCH_TRAINEE, {
     options: {
+      fetchPolicy: 'cache-and-network',
       variables: {
-        skip: 0, limit: 5,
+        skip: 0, limit: 20,
       },
     },
   },
