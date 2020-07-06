@@ -5,7 +5,6 @@ import { Route, useHistory } from 'react-router-dom';
 import { AuthLayout } from '../layouts';
 import { isAuthUser } from '../lib';
 
-
 const AuthLayoutRoute = ({ component: Component, ...rest }) => {
   const history = useHistory();
 

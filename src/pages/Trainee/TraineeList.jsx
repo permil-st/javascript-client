@@ -7,6 +7,7 @@ import { Mutation } from '@apollo/react-components';
 
 import { FETCH_TRAINEE } from './query';
 import { ADD_TRAINEE, DELETE_TRAINEE, UPDATE_TRAINEE } from './mutation';
+import { UPDATE_TRAINEE_SUB, DELETE_TRAINEE_SUB } from './subscription';
 import {
   AddDialog, DeleteDialog, EditDialog, Table,
 } from './components';
@@ -30,6 +31,63 @@ class TraineeList extends React.Component {
       page: 0,
       rowsPerPage: 20,
     };
+  }
+
+  componentDidMount = () => {
+    const { data: { subscribeToMore} } = this.props;
+
+    subscribeToMore({
+      document: UPDATE_TRAINEE_SUB,
+      updateQuery: (prev, { subscriptionData }) => {
+        const {
+          getAllTrainees: { records = [] } = {},
+        } = prev;
+
+        if (!subscriptionData.data) return prev;
+
+        const newRecords = [...records].map((value) => {
+          if (value.originalId === subscriptionData.data.updateTrainee.originalId) {
+            return {
+              ...value,
+              ...subscriptionData.data.updateTrainee,
+            };
+          }
+
+          return value;
+        })
+
+        return {
+          getAllTrainees : {
+            ...prev.getAllTrainees,
+            records: newRecords,
+          },
+        };
+      },
+    });
+
+    subscribeToMore({
+      document: DELETE_TRAINEE_SUB,
+      updateQuery: (prev, { subscriptionData }) => {
+        const {
+          getAllTrainees: { records = [] } = {},
+        } = prev;
+
+        if (!subscriptionData.data) return prev;
+
+        const newRecords = [...records].filter((value) => {
+          if (value.originalId !== subscriptionData.data.deleteTrainee)
+            return value;
+        });
+
+        return {
+          getAllTrainees : {
+            ...prev.getAllTrainees,
+            count: prev.getAllTrainees.count - 1,
+            records: newRecords,
+          },
+        };
+      },
+    });
   }
 
   handleButtonClick = () => {
@@ -191,12 +249,6 @@ class TraineeList extends React.Component {
 
     const variables = { skip: rowsPerPage * page, limit: rowsPerPage };
 
-    // if (count > 0 && (!((page + 1) * rowsPerPage) < count && (page * rowsPerPage) >= count)) {
-    //   this.setState({ page: page - 1 });
-    // }
-
-    console.log(page);
-
     return (
       <>
         <Grid container justify="flex-end">
@@ -211,7 +263,6 @@ class TraineeList extends React.Component {
           { (addTrainee) => (
             <Mutation
               mutation={UPDATE_TRAINEE}
-              refetchQueries={[{ query: FETCH_TRAINEE, variables }]}
             >
               {
                 (updateTrainee) => (

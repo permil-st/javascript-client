@@ -1,5 +1,6 @@
 export const BASE_URL = 'https://express-training.herokuapp.com/api/';
-export const BASE_URL_GQL = 'http://192.168.0.151:9001/graphql';
+export const BASE_URL_GQL = 'http://localhost:9001/graphql';
+export const BASE_URL_WS = 'ws://localhost:9001/graphql';
 
 export const PUBLIC_IMAGE_FOLDER = '/images/';
 export const DEFAULT_BANNER_IMAGE = 'banners/default.png';
